@@ -4,10 +4,12 @@ import java.util.List;
 
 import com.example.course.dto.CourseDTO;
 import com.example.course.dto.QuestionDTO;
+import com.example.course.dto.QuestionStatusDTO;
 import com.example.course.dto.SubTopicDTO;
 import com.example.course.dto.TopicDTO;
 import com.example.course.entity.Course;
 import com.example.course.entity.Questions;
+import com.example.course.entity.QuestionsStatus;
 import com.example.course.entity.SubTopic;
 import com.example.course.entity.Topics;
 
@@ -60,4 +62,8 @@ public interface CourseService {
 	public String deleteSubTopic(Long id);
 	
 	public SubTopic getSubTopicBySubTopicId(Long id);
+	
+	public QuestionsStatus solveQuestion(Long id , QuestionStatusDTO questionStatusDTO);
+	
+	public QuestionsStatus getStatusByQuestionId(Long id);
 }

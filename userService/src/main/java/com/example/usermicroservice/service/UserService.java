@@ -7,6 +7,7 @@ import com.example.usermicroservice.dto.UserDTO;
 import com.example.usermicroservice.entity.RoleModel;
 import com.example.usermicroservice.entity.UserData;
 import com.example.usermicroservice.helper.Course;
+import com.example.usermicroservice.helper.QuestionStatus;
 import com.example.usermicroservice.helper.Questions;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
@@ -89,4 +90,8 @@ public interface UserService {
 	public SubTopic updateSubTopic(Long id, SubTopic subTopic);
 	
 	public Questions updateQuestion(Long id, Questions question);
+	
+	public QuestionStatus solveQuestion(Long id,QuestionStatus questionStatus);
+	
+	public QuestionStatus getStatusByQuestionId(Long id);
 }

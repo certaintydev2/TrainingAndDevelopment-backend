@@ -30,6 +30,7 @@ import com.example.usermicroservice.entity.AuthenticationResponse;
 import com.example.usermicroservice.entity.RoleModel;
 import com.example.usermicroservice.entity.UserData;
 import com.example.usermicroservice.helper.Course;
+import com.example.usermicroservice.helper.QuestionStatus;
 import com.example.usermicroservice.helper.Questions;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
@@ -488,6 +489,26 @@ public class UserController {
 			return new ResponseEntity<Questions>(questionData, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Questions>(HttpStatus.CONFLICT);
+		}
+	}
+	
+	@PostMapping("/solveQuestion/{id}")
+	public ResponseEntity<QuestionStatus> solveQuestion(@PathVariable("id") Long id , @RequestBody QuestionStatus questionStatus) {
+		try {
+			QuestionStatus questionData = this.userService.solveQuestion(id, questionStatus);
+			return new ResponseEntity<QuestionStatus>(questionData, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<QuestionStatus>(HttpStatus.CONFLICT);
+		}
+	}
+	
+	@GetMapping("/getStatusByQuestionId/{id}")
+	public ResponseEntity<QuestionStatus> getStatusByQuestionId(@PathVariable("id") Long id) {
+		try {
+			QuestionStatus questionData = this.userService.getStatusByQuestionId(id);
+			return new ResponseEntity<QuestionStatus>(questionData, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<QuestionStatus>(HttpStatus.CONFLICT);
 		}
 	}
 	

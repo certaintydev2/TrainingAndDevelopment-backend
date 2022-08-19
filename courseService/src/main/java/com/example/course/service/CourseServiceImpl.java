@@ -1,6 +1,5 @@
 package com.example.course.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,14 +7,17 @@ import org.springframework.stereotype.Service;
 
 import com.example.course.dto.CourseDTO;
 import com.example.course.dto.QuestionDTO;
+import com.example.course.dto.QuestionStatusDTO;
 import com.example.course.dto.SubTopicDTO;
 import com.example.course.dto.TopicDTO;
 import com.example.course.entity.Course;
 import com.example.course.entity.Questions;
+import com.example.course.entity.QuestionsStatus;
 import com.example.course.entity.SubTopic;
 import com.example.course.entity.Topics;
 import com.example.course.repository.CourseRepository;
 import com.example.course.repository.QuestionRepository;
+import com.example.course.repository.QuestionStatusRepository;
 import com.example.course.repository.SubTopicRepository;
 import com.example.course.repository.TopicRepository;
 import com.example.course.util.Constants;
@@ -34,6 +36,9 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Autowired
 	private QuestionRepository questionRepo;
+	
+	@Autowired
+	private QuestionStatusRepository questionStatusRepo;
 
 	@Override
 	public Course addCourse(CourseDTO course) {
@@ -200,6 +205,20 @@ public class CourseServiceImpl implements CourseService {
 		Questions question = this.questionRepo.findQuestionById(id);
 		question.setQuestion(questionDTO.getQuestion());
 		return this.questionRepo.save(question);
+	}
+
+	@Override
+	public QuestionsStatus solveQuestion(Long id, QuestionStatusDTO questionStatusDTO) {
+		QuestionsStatus questionsStatus = new QuestionsStatus();
+		questionsStatus.setQuestionId(id);
+		questionsStatus.setUserId(questionStatusDTO.getUserId());
+		questionsStatus.setStatus(questionStatusDTO.getStatus());
+		return this.questionStatusRepo.save(questionsStatus);
+	}
+
+	@Override
+	public QuestionsStatus getStatusByQuestionId(Long id) {
+		return this.questionStatusRepo.findStatusByQuestionId(id);
 	}
 
 }

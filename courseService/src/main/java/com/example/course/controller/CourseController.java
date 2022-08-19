@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.course.dto.CourseDTO;
 import com.example.course.dto.QuestionDTO;
+import com.example.course.dto.QuestionStatusDTO;
 import com.example.course.dto.SubTopicDTO;
 import com.example.course.dto.TopicDTO;
 import com.example.course.entity.Course;
 import com.example.course.entity.Questions;
+import com.example.course.entity.QuestionsStatus;
 import com.example.course.entity.SubTopic;
 import com.example.course.entity.Topics;
 import com.example.course.repository.CourseRepository;
@@ -246,5 +248,16 @@ public class CourseController {
 	@PutMapping("/updateQuestion/{id}")
 	public Questions updateQuestion(@PathVariable("id") Long id, @RequestBody QuestionDTO questionDTO) {
 		return this.courseService.updateQuestion(id, questionDTO);
+	}
+	
+	@PostMapping("/solveQuestion/{id}")
+	public QuestionsStatus solveQuestion(@PathVariable("id") Long id , @RequestBody QuestionStatusDTO questionStatusDTO) {
+		return this.courseService.solveQuestion(id, questionStatusDTO);
+	}
+	
+	
+	@GetMapping("/getStatusByQuestionId/{id}")
+	public QuestionsStatus getStatusByQuestionId(@PathVariable("id") Long id) {
+		return this.courseService.getStatusByQuestionId(id);
 	}
 }

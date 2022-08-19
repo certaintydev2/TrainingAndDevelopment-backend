@@ -22,6 +22,7 @@ import com.example.usermicroservice.dto.UserDTO;
 import com.example.usermicroservice.entity.RoleModel;
 import com.example.usermicroservice.entity.UserData;
 import com.example.usermicroservice.helper.Course;
+import com.example.usermicroservice.helper.QuestionStatus;
 import com.example.usermicroservice.helper.Questions;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
@@ -516,5 +517,37 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		return userList;
+	}
+
+
+	@Override
+	public QuestionStatus solveQuestion(Long id, QuestionStatus questionStatus) {
+		QuestionStatus questionStatusData = new QuestionStatus();
+		ResponseEntity<QuestionStatus> claimResponse= restTemplate.exchange(String.format(CourseApiUrl.QUESTION_STATUS_API_ENDPOINT, id),
+                HttpMethod.POST,
+                new HttpEntity<>(questionStatus),
+                QuestionStatus.class);
+		if (claimResponse != null && claimResponse.hasBody()) {
+			questionStatusData = claimResponse.getBody();
+		}
+		questionStatus.setId(questionStatusData.getId());
+		questionStatus.setQuestionId(questionStatusData.getQuestionId());
+		questionStatus.setUserId(questionStatusData.getUserId());
+		questionStatus.setStatus(questionStatusData.getStatus());
+		return questionStatus;
+	}
+
+
+	@Override
+	public QuestionStatus getStatusByQuestionId(Long id) {
+		QuestionStatus questionStatus = new QuestionStatus();
+		ResponseEntity<QuestionStatus> claimResponse= restTemplate.exchange(String.format(CourseApiUrl.QUESTION_STATUS_BY_QUESTION_ID_API_ENDPOINT, id),
+                HttpMethod.GET,
+                null,
+                QuestionStatus.class);
+		if (claimResponse != null && claimResponse.hasBody()) {
+			questionStatus = claimResponse.getBody();
+		}
+		return questionStatus;
 	}
 }
