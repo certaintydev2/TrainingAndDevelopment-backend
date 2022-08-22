@@ -550,4 +550,46 @@ public class UserServiceImpl implements UserService {
 		}
 		return questionStatus;
 	}
+
+
+	@Override
+	public List<UserData> getAuthorList() {
+		List<UserData> authorList = new ArrayList<UserData>();
+		for(UserData user : this.getAllUsers()) {
+			for(RoleModel role : user.getRoles()) {
+				if(role.getRoleName().equals(Constants.ROLE_AUTHOR)) {
+					authorList.add(user);
+				}
+			}
+		}
+		return authorList;
+	}
+
+
+	@Override
+	public List<UserData> getMentorList() {
+		List<UserData> mentorList = new ArrayList<UserData>();
+		for(UserData user : this.getAllUsers()) {
+			for(RoleModel role : user.getRoles()) {
+				if(role.getRoleName().equals(Constants.ROLE_MENTOR)) {
+					mentorList.add(user);
+				}
+			}
+		}
+		return mentorList;
+	}
+
+
+	@Override
+	public List<UserData> getTraineeList() {
+		List<UserData> traineeList = new ArrayList<UserData>();
+		for(UserData user : this.getAllUsers()) {
+			for(RoleModel role : user.getRoles()) {
+				if(role.getRoleName().equals(Constants.ROLE_TRAINEE)) {
+					traineeList.add(user);
+				}
+			}
+		}
+		return traineeList;
+	}
 }

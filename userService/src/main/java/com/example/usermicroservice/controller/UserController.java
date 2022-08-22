@@ -512,4 +512,34 @@ public class UserController {
 		}
 	}
 	
+	@GetMapping("/getAuthorList")
+	public ResponseEntity<List<UserData>> getAuthorList() {
+		try {
+			List<UserData> authorList = this.userService.getAuthorList();
+			return new ResponseEntity<List<UserData>>(authorList, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/getMentorList")
+	public ResponseEntity<List<UserData>> getMentorList() {
+		try {
+			List<UserData> mentorList = this.userService.getMentorList();
+			return new ResponseEntity<List<UserData>>(mentorList, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/getTraineeList")
+	public ResponseEntity<List<UserData>> getTraineeList() {
+		try {
+			List<UserData> traineeList = this.userService.getTraineeList();
+			return new ResponseEntity<List<UserData>>(traineeList, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
 }

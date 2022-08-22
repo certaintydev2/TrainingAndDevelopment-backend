@@ -94,4 +94,10 @@ public interface UserService {
 	public QuestionStatus solveQuestion(Long id,QuestionStatus questionStatus);
 	
 	public QuestionStatus getStatusByQuestionId(Long id);
+	
+	public List<UserData> getAuthorList();
+	
+	public List<UserData> getMentorList();
+	
+	public List<UserData> getTraineeList();
 }
