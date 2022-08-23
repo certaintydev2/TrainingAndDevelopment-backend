@@ -73,6 +73,10 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	/*
+	 *   api to get all users from database
+	 */
+	
 	@GetMapping("/getAllUsers")
 	public ResponseEntity<List<UserData>> getAllUsers() {
 		try {
@@ -83,6 +87,11 @@ public class UserController {
 		}
 	}
 	
+	
+	/*
+	 *  api to get all users except admin
+	 */
+	
 	@GetMapping("/getAllUsersExceptAdmin")
 	public ResponseEntity<List<UserData>> getAllUsersExceptAdmin() {
 		try {
@@ -92,6 +101,10 @@ public class UserController {
 			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	/*
+	 * api to get User By Username
+	 */
 
 	@GetMapping("/authenticate/getUserByUserName/{userName}")
 	public ResponseEntity<UserData> getUserByUserName(@PathVariable("userName") String userName) {
@@ -103,6 +116,10 @@ public class UserController {
 		}
 	}
 
+	/*
+	 * api to get User By Id
+	 */
+	
 	@GetMapping("/getUserById/{id}")
 	public ResponseEntity<UserData> getUserById(@PathVariable("id") Long id) {
 		try {
@@ -122,6 +139,10 @@ public class UserController {
 			return new ResponseEntity<UserData>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 *  api for delete user by id
+	 */
 
 	@DeleteMapping("/deleteById/{id}")
 	public ResponseEntity<Object> deleteUser(@PathVariable("id") Long id){
@@ -131,6 +152,10 @@ public class UserController {
 			return new ResponseEntity<Object>(Constants.USER_CANNOT_DELETE, HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	/*
+	 * api for update user by id
+	 */
 	
 	@PutMapping("/updateUser/{id}")
 	public ResponseEntity<UserData> updateUser(@PathVariable("id") Long id , @RequestBody UserDTO userData) {
@@ -142,6 +167,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 * api to get all roles
+	 */
+	
 	@GetMapping("/authenticate/getAllRoles")
 	public ResponseEntity<List<RoleModel>> getAllRoles() {
 		try {
@@ -152,6 +181,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api for add roles
+	 */
+	
 	@PostMapping("/authenticate/add-roles")
 	public ResponseEntity<RoleModel> addRoles(@RequestBody RoleDTO roles) {
 		try {
@@ -161,6 +194,10 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 *  api to get all user in List of string form
+	 */
 
 	@GetMapping("/getUser")
 	public ResponseEntity<List<String>> getUser() {
@@ -171,6 +208,10 @@ public class UserController {
 			return new ResponseEntity<List<String>>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	/*
+	 * api for add course
+	 */
 
 	@PostMapping("/add-course")
 	public ResponseEntity<Course> addCourse(@RequestBody Course course) {
@@ -185,6 +226,10 @@ public class UserController {
 			return new ResponseEntity<Course>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 * api for add topics
+	 */
 
 	@PostMapping("/add-topics")
 	public ResponseEntity<Topics> addTopics(@RequestBody Topics topics) {
@@ -200,6 +245,10 @@ public class UserController {
 			return new ResponseEntity<Topics>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 * api for add subTopics
+	 */
 
 	@PostMapping("/add-sub_topics")
 	public ResponseEntity<SubTopic> addSubTopics(@RequestBody SubTopic subTopic) {
@@ -216,6 +265,10 @@ public class UserController {
 			return new ResponseEntity<SubTopic>(HttpStatus.CONFLICT);
 		}	
 	}
+	
+	/*
+	 * api for add questions
+	 */
 
 	@PostMapping("/add-questions")
 	public ResponseEntity<Questions> addQuestions(@RequestBody Questions questions) {
@@ -231,6 +284,10 @@ public class UserController {
 			return new ResponseEntity<Questions>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 * api to get all courses
+	 */
 
 	@GetMapping("/authenticate/getCourseNames")
 	public ResponseEntity<List<Course>> getCourseNames() {
@@ -241,6 +298,10 @@ public class UserController {
 			return new ResponseEntity<List<Course>>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	/*
+	 * api to get all topics
+	 */
 
 	@GetMapping("/getTopics")
 	public ResponseEntity<List<Topics>> getTopics() {
@@ -251,6 +312,10 @@ public class UserController {
 			return new ResponseEntity<List<Topics>>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	/*
+	 * api to get all subtopics
+	 */
 
 	@GetMapping("/getSubTopics")
 	public ResponseEntity<List<SubTopic>> getSubTopics() {
@@ -262,6 +327,10 @@ public class UserController {
 		}
 	}
 
+	/*
+	 * api to get all questions
+	 */
+	
 	@GetMapping("/getQuestions")
 	public ResponseEntity<List<Questions>> getQuestions() {
 		try {
@@ -271,6 +340,10 @@ public class UserController {
 			return new ResponseEntity<List<Questions>>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	/*
+	 *  api to get topics by courseId
+	 */
 
 	@GetMapping("/getTopicsById/{courseId}")
 	public ResponseEntity<List<Topics>> getTopicByCourseId(@PathVariable("courseId") Long courseId) {
@@ -281,6 +354,10 @@ public class UserController {
 			return new ResponseEntity<List<Topics>>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	/*
+	 *  api to get subTopics by topicId
+	 */
 
 	@GetMapping("/getSubTopicsById/{topicId}")
 	public ResponseEntity<List<SubTopic>> getSubTopicByTopicId(@PathVariable("topicId") Long topicId) {
@@ -291,7 +368,11 @@ public class UserController {
 			return new ResponseEntity<List<SubTopic>>(HttpStatus.NOT_FOUND);
 		}
 	}
-
+	
+	/*
+	 *  api to get Questions by subTopicId
+	 */
+	
 	@GetMapping("/getQuestionsById/{subTopicId}")
 	public ResponseEntity<List<Questions>> getQuestionsBySubTopicId(@PathVariable("subTopicId") Long subTopicId) {
 		try {
@@ -302,6 +383,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api for send email
+	 */
+	
 	@PostMapping("/sendEmail")
 	public ResponseEntity<Object> sendEmail(@RequestBody EmailPayload emailPayload) {
 		try {
@@ -310,6 +395,10 @@ public class UserController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
+	
+	/*
+	 *  api for send otp
+	 */
 	
 	@PostMapping("/authenticate/send-otp")
 	public ResponseEntity<Object> sendOtp(@RequestBody OtpPayload otpPayload) {
@@ -320,6 +409,10 @@ public class UserController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
+	
+	/*
+	 *  api for forgot password
+	 */
 	
 	@PostMapping("/authenticate/forgotPassword")
 	public ResponseEntity<Object> changePassword(@RequestBody ForgotPasswordPayload forgotPasswordPayload){
@@ -361,6 +454,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api to get questions by courseName
+	 */
+	
 	@GetMapping("/getQuestionsByCourse/{course}")
 	public ResponseEntity<List<Questions>> getQuestionsByCourse(@PathVariable("course") String course) {
 		try {
@@ -371,6 +468,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api for update course by courseId
+	 */
+	
 	@PutMapping("/updateCourse/{courseId}")
 	public ResponseEntity<Course> updateCourse(@PathVariable("courseId") Long courseId , @RequestBody Course course) {
 		try {
@@ -380,6 +481,10 @@ public class UserController {
 			return new ResponseEntity<Course>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 *  api to get course bt courseId
+	 */
 
 	@GetMapping("/getCourseByCourseId/{courseId}")
 	public ResponseEntity<Course> getCourseByCourseId(@PathVariable("courseId") Long courseId){
@@ -391,6 +496,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api for update Topic by id
+	 */
+	
 	@PutMapping("/updateTopic/{id}")
 	public ResponseEntity<Topics> updateTopic(@PathVariable("id") Long id , @RequestBody Topics topic) {
 		try {
@@ -400,6 +509,10 @@ public class UserController {
 			return new ResponseEntity<Topics>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 *  api to get topic by topicId
+	 */
 	
 	@GetMapping("/getTopicByTopicId/{id}")
 	public ResponseEntity<Topics> getTopicByTopicId(@PathVariable("id") Long id){
@@ -411,6 +524,9 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api for delete course by courseId
+	 */
 	
 	@DeleteMapping("/deleteCourse/{courseId}")
 	public ResponseEntity<String> deleteCourse(@PathVariable("courseId") Long courseId) {
@@ -422,6 +538,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api for delete topic by topicId
+	 */
+	
 	@DeleteMapping("/deleteTopic/{id}")
 	public ResponseEntity<String> deleteTopic(@PathVariable("id") Long id) {
 		try {
@@ -431,6 +551,10 @@ public class UserController {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 *  api for delete subTopic by subTopicId
+	 */
 	
 	@DeleteMapping("/deleteSubTopic/{id}")
 	public ResponseEntity<String> deleteSubTopic(@PathVariable("id") Long id) {
@@ -442,6 +566,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api for delete question by questionId
+	 */
+	
 	@DeleteMapping("/deleteQuestion/{id}")
 	public ResponseEntity<String> deleteQuestion(@PathVariable("id") Long id) {
 		try {
@@ -451,6 +579,10 @@ public class UserController {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 *  api to get subTopic by subTopicId
+	 */
 	
 	@GetMapping("/getSubTopicBySubTopicId/{id}")
 	public ResponseEntity<SubTopic> getSubTopicBySubTopicId(@PathVariable("id") Long id){
@@ -462,6 +594,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api to get questions by questionId
+	 */
+	
 	@GetMapping("/getQuestionsByQuestionId/{id}")
 	public ResponseEntity<Questions> getQuestionsByQuestionId(@PathVariable("id") Long id){
 		try {
@@ -471,6 +607,10 @@ public class UserController {
 			return new ResponseEntity<Questions>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 *  api for udpate subTopic by subTopicId
+	 */
 	
 	@PutMapping("/updateSubTopic/{id}")
 	public ResponseEntity<SubTopic> updateSubTopic(@PathVariable("id") Long id , @RequestBody SubTopic subTopic) {
@@ -482,6 +622,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 * api for update question by questionId
+	 */
+	
 	@PutMapping("/updateQuestion/{id}")
 	public ResponseEntity<Questions> updateQuestion(@PathVariable("id") Long id , @RequestBody Questions question) {
 		try {
@@ -491,6 +635,10 @@ public class UserController {
 			return new ResponseEntity<Questions>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 *  api for solve question by questionId
+	 */
 	
 	@PostMapping("/solveQuestion/{id}")
 	public ResponseEntity<QuestionStatus> solveQuestion(@PathVariable("id") Long id , @RequestBody QuestionStatus questionStatus) {
@@ -502,6 +650,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api to get status by questionId
+	 */
+	
 	@GetMapping("/getStatusByQuestionId/{id}")
 	public ResponseEntity<QuestionStatus> getStatusByQuestionId(@PathVariable("id") Long id) {
 		try {
@@ -511,6 +663,10 @@ public class UserController {
 			return new ResponseEntity<QuestionStatus>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	/*
+	 *  api to get author list
+	 */
 	
 	@GetMapping("/getAuthorList")
 	public ResponseEntity<List<UserData>> getAuthorList() {
@@ -522,6 +678,10 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api to get mentor list
+	 */
+	
 	@GetMapping("/getMentorList")
 	public ResponseEntity<List<UserData>> getMentorList() {
 		try {
@@ -531,6 +691,10 @@ public class UserController {
 			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	/*
+	 *  api to get trainee list
+	 */
 	
 	@GetMapping("/getTraineeList")
 	public ResponseEntity<List<UserData>> getTraineeList() {
