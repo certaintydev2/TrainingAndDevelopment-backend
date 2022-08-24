@@ -298,6 +298,8 @@ public class UserServiceImpl implements UserService {
 	public UserData updateUser(Long id, UserDTO user) {
 		UserData userData = this.userRepo.getUserById(id); // get user by id
 		userData.setName(user.getName());
+		userData.setEmail(user.getEmail());
+		userData.setUserName(user.getUserName());
 		userData.setProfile(user.getProfile());
 		userData.setRoles(user.getRoles());
 		return this.userRepo.save(userData);
