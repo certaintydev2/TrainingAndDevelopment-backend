@@ -40,6 +40,9 @@ public class CourseServiceImpl implements CourseService {
 	@Autowired
 	private QuestionStatusRepository questionStatusRepo;
 
+	/*
+	 * here course added to database to database
+	 */
 	@Override
 	public Course addCourse(CourseDTO course) {
 		Course courseData = new Course();
@@ -49,6 +52,9 @@ public class CourseServiceImpl implements CourseService {
 		return this.courseRepo.save(courseData);
 	}
 
+	/*
+	 * here topic added to database to database
+	 */
 	@Override
 	public Topics addTopics(TopicDTO topics) {
 		Topics topic = new Topics();
@@ -58,6 +64,9 @@ public class CourseServiceImpl implements CourseService {
 		return this.topicRepo.save(topic);
 	}
 
+	/*
+	 * here subtopic added to database to database
+	 */
 	@Override
 	public SubTopic addSubTopics(SubTopicDTO subTopic) {
 		SubTopic subTopicData = new SubTopic();
@@ -67,6 +76,9 @@ public class CourseServiceImpl implements CourseService {
 		return this.subTopicRepo.save(subTopicData);
 	}
 
+	/*
+	 * here question added to database to database
+	 */
 	@Override
 	public Questions addQuestions(QuestionDTO questions) {
 		Questions questionData = new Questions();
@@ -76,46 +88,73 @@ public class CourseServiceImpl implements CourseService {
 		return this.questionRepo.save(questionData);
 	}
 
+	/*
+	 * get all courses from database
+	 */
 	@Override
 	public List<Course> getCourse() {
 		return this.courseRepo.findAll();
 	}
 
+	/*
+	 * get all topics from database
+	 */
 	@Override
 	public List<Topics> getTopics() {
 		return this.topicRepo.findAll();
 	}
 
+	/*
+	 * get all subtopics from database
+	 */
 	@Override
 	public List<SubTopic> getSubTopics() {
 		return this.subTopicRepo.findAll();
 	}
 
+	/*
+	 * get all questions from database
+	 */
 	@Override
 	public List<Questions> getQuestions() {
 		return this.questionRepo.findAll();
 	}
 
+	/*
+	 * get topics by courseId
+	 */
 	@Override
 	public List<Topics> getTopicByCourseId(Long courseId) {
 		return this.topicRepo.findTopicByCourseId(courseId);
 	}
 
+	/*
+	 * get subtopic by topicId
+	 */
 	@Override
 	public List<SubTopic> getSubTopicByTopicId(Long topicId) {
 		return this.subTopicRepo.findSubTopicByTopicId(topicId);
 	}
 
+	/*
+	 * get question by subtopicId
+	 */
 	@Override
 	public List<Questions> getQuestionsBySubTopicId(Long subTopicId) {
 		return this.questionRepo.findQuestionsBySubTopicId(subTopicId);
 	}
 
+	/*
+	 * get course by course name
+	 */
 	@Override
 	public Course getCourseByCourseName(String course) {
 		return this.courseRepo.findCourseByCourseName(course);
 	}
 
+	/*
+	 * update course
+	 */
 	@Override
 	public Course updateCourse(Long courseId, CourseDTO courseDTO) {
 		Course course = this.courseRepo.getById(courseId);
@@ -125,11 +164,17 @@ public class CourseServiceImpl implements CourseService {
 		return this.courseRepo.save(course);
 	}
 
+	/*
+	 * get course by courseId
+	 */
 	@Override
 	public Course getCourseByCourseId(Long courseId) {
 		return this.courseRepo.findCourseByCourseId(courseId);
 	}
 
+	/*
+	 * update topic
+	 */
 	@Override
 	public Topics updateTopic(Long id, TopicDTO topicDTO) {
 		Topics topic = this.topicRepo.getById(id);
@@ -137,62 +182,86 @@ public class CourseServiceImpl implements CourseService {
 		return this.topicRepo.save(topic);
 	}
 
+	/*
+	 * get topic by topicId
+	 */
 	@Override
 	public Topics getTopicByTopicId(Long id) {
 		return this.topicRepo.findTopicByTopicId(id);
 	}
 
+	/*
+	 * delete course
+	 */
 	@Override
 	public String deleteCourse(Long courseId) {
-		Course course = this.courseRepo.findCourseByCourseId(courseId);
-		List<Topics> topics_list = this.topicRepo.findTopicByCourseId(courseId);
+		Course course = this.courseRepo.findCourseByCourseId(courseId); // here we get course by courseId
+		List<Topics> topics_list = this.topicRepo.findTopicByCourseId(courseId); // here we get topic list by courseId
 		
 		for(Topics topic : topics_list) {
-			this.deleteTopic(topic.getId());
+			this.deleteTopic(topic.getId()); // first we delete topic associated by courseId
 		}
-		this.courseRepo.delete(course);
+		this.courseRepo.delete(course); // and here we delete course
 		return Constants.COURSE_DELETED_SUCCESSFULLY;
 	}
 
+	/*
+	 * delete topic
+	 */
 	@Override
 	public String deleteTopic(Long id) {
-		Topics topic = this.topicRepo.findTopicByTopicId(id);
-		List<SubTopic> subTopics_list = this.subTopicRepo.findSubTopicByTopicId(id);
+		Topics topic = this.topicRepo.findTopicByTopicId(id); // here we get topic by topicId
+		List<SubTopic> subTopics_list = this.subTopicRepo.findSubTopicByTopicId(id); // here we get subTopicList by topicId
 		for(SubTopic subTopic : subTopics_list) {
-			this.deleteSubTopic(subTopic.getId());
+			this.deleteSubTopic(subTopic.getId()); // first we delete subtopic associated with topicId
 		}
-		this.topicRepo.delete(topic);
+		this.topicRepo.delete(topic); // and here we delete topic
 		return Constants.TOPIC_DELETED_SUCCESSFULLY;
 	}
 
+	/*
+	 * delete subTopic
+	 */
 	@Override
 	public String deleteSubTopic(Long id) {
-		SubTopic subTopic = this.subTopicRepo.findSubTopicById(id);
-		List<Questions> questions_list = this.questionRepo.findQuestionsBySubTopicId(id);
+		SubTopic subTopic = this.subTopicRepo.findSubTopicById(id); // here we get subTopic by subTopicId
+		List<Questions> questions_list = this.questionRepo.findQuestionsBySubTopicId(id); // here we get questions with subTopicId 
 		for(Questions ques : questions_list) {
-			this.deleteQuestion(ques.getId());
+			this.deleteQuestion(ques.getId()); // here we delete question associated with subtopic
 		}
-		this.subTopicRepo.delete(subTopic);
+		this.subTopicRepo.delete(subTopic); // and here we delete subtopic
 		return Constants.SUBTOPIC_DELETED_SUCCESSFULLY;
 	}
 	
+	/*
+	 * delete question
+	 */
 	@Override
 	public String deleteQuestion(Long id) {
-		Questions question = this.questionRepo.findQuestionById(id);
-		this.questionRepo.delete(question);
+		Questions question = this.questionRepo.findQuestionById(id); //here we get question by questionId
+		this.questionRepo.delete(question); // and here delete the question
 		return Constants.QUESTION_DELETED_SUCCESSFULLY;
 	}
 
+	/*
+	 * get subtopic by id
+	 */
 	@Override
 	public SubTopic getSubTopicBySubTopicId(Long id) {
 		return this.subTopicRepo.findSubTopicById(id);
 	}
 
+	/*
+	 * get question by id
+	 */
 	@Override
 	public Questions getQuestionsByQuestionId(Long id) {
 		return this.questionRepo.findQuestionById(id);
 	}
 
+	/*
+	 * update subtopic
+	 */
 	@Override
 	public SubTopic updateSubTopic(Long id, SubTopicDTO subTopicDTO) {
 		SubTopic subTopic = this.subTopicRepo.findSubTopicById(id);
@@ -200,6 +269,9 @@ public class CourseServiceImpl implements CourseService {
 		return this.subTopicRepo.save(subTopic);
 	}
 
+	/*
+	 * update question
+	 */
 	@Override
 	public Questions updateQuestion(Long id, QuestionDTO questionDTO) {
 		Questions question = this.questionRepo.findQuestionById(id);
@@ -207,6 +279,9 @@ public class CourseServiceImpl implements CourseService {
 		return this.questionRepo.save(question);
 	}
 
+	/*
+	 * solve question
+	 */
 	@Override
 	public QuestionsStatus solveQuestion(Long id, QuestionStatusDTO questionStatusDTO) {
 		QuestionsStatus questionsStatus = new QuestionsStatus();
@@ -216,6 +291,9 @@ public class CourseServiceImpl implements CourseService {
 		return this.questionStatusRepo.save(questionsStatus);
 	}
 
+	/*
+	 * get status by questionId
+	 */
 	@Override
 	public QuestionsStatus getStatusByQuestionId(Long id) {
 		return this.questionStatusRepo.findStatusByQuestionId(id);
