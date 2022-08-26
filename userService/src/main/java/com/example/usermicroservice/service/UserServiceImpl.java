@@ -302,7 +302,6 @@ public class UserServiceImpl implements UserService {
 		userData.setUserName(user.getUserName());
 		userData.setProfile(user.getProfile());
 		userData.setRoles(user.getRoles());
-		userData.setPassword(passwordEncoder.encode(user.getPassword()));
 		return this.userRepo.save(userData);
 	}
 
