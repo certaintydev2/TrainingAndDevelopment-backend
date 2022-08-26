@@ -32,6 +32,9 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtUtil jwtUtil;
 
+	/*
+	 * here authenticate and validate  the token and extract jwt from request
+	 */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -65,6 +68,9 @@ public class CustomJwtAuthenticationFilter extends OncePerRequestFilter {
 
 	}
 
+	/*
+	 * extract jwt from request
+	 */
 	private String extractJwtFromRequest(HttpServletRequest request) {
 		String bearerToken = request.getHeader("Authorization");
 

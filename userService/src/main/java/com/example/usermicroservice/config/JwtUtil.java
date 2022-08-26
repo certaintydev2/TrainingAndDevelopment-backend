@@ -34,17 +34,20 @@ public class JwtUtil {
 	
 	private static Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
-	@Value("${jwt.secret}")
+	@Value("${jwt.secret}") // jwt secret key
 	public void setSecret(String secret) {
 		this.secret = secret;
 	}
 
-	@Value("${jwt.jwtExpirationInMs}")
+	@Value("${jwt.jwtExpirationInMs}") // jwt expiration time 
 	public void setJwtExpirationInMs(int jwtExpirationInMs) {
 		this.jwtExpirationInMs = jwtExpirationInMs;
 	}
 
-	public String generateToken(UserDetails userDetails) {
+	/*
+	 * generate token method
+	 */
+	public String generateToken(UserDetails userDetails) { 
 		Map<String, Object> claims = new HashMap<>();
 		Collection<? extends GrantedAuthority> roles = userDetails.getAuthorities();
 
@@ -63,12 +66,18 @@ public class JwtUtil {
 		return doGenerateToken(claims, userDetails.getUsername());
 	}
 
+	/*
+	 * here is secret key and expiration time to generate token
+	 */
 	public String doGenerateToken(Map<String, Object> claims, String subject) {
 		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
 				.signWith(SignatureAlgorithm.HS512, secret).compact();
 	}
 
+	/*
+	 * validate token method
+	 */
 	public boolean validateToken(String authToken) {
 		try {
 			Jwts.parser().setSigningKey(secret).parseClaimsJws(authToken);
@@ -80,11 +89,17 @@ public class JwtUtil {
 		}
 	}
 
+	/*
+	 * get username from token
+	 */
 	public String getUsernameFromToken(String token) {
 		Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 		return claims.getSubject();
 	}
 
+	/*
+	 * get roles from token
+	 */
 	public List<SimpleGrantedAuthority> getRolesFromToken(String token) {
 		Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 		List<SimpleGrantedAuthority> roles = null;

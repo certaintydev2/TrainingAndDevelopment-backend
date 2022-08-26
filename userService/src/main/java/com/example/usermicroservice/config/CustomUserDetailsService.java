@@ -33,6 +33,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Autowired
 	private RoleRepository roleRepo;
 
+	/*
+	 * here we get user by username from database and add role to simple grant authority
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
