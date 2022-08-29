@@ -34,6 +34,8 @@ import com.example.usermicroservice.helper.QuestionStatus;
 import com.example.usermicroservice.helper.Questions;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
+import com.example.usermicroservice.payload.ChangePasswordPayload;
+import com.example.usermicroservice.payload.CheckPasswordPayload;
 import com.example.usermicroservice.payload.EmailPayload;
 import com.example.usermicroservice.payload.ForgotPasswordPayload;
 import com.example.usermicroservice.payload.LoginPayload;
@@ -415,15 +417,20 @@ public class UserController {
 	 */
 	
 	@PostMapping("/authenticate/forgotPassword")
-	public ResponseEntity<Object> changePassword(@RequestBody ForgotPasswordPayload forgotPasswordPayload){
+	public ResponseEntity<Object> forgotPassword(@RequestBody ForgotPasswordPayload forgotPasswordPayload){
 		try {
-			String passwordData = this.userService.changePassword(forgotPasswordPayload);
+			String passwordData = this.userService.forgotPassword(forgotPasswordPayload);
 			return new ResponseEntity<Object>(passwordData, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
-
+	
+	@PostMapping("/changePassword/{id}")
+	public ResponseEntity<Object> changePassword(@PathVariable("id") Long id , @RequestBody ChangePasswordPayload changePasswordPayload) {
+		String passwordData = this.userService.changePassword(id, changePasswordPayload);
+		return new ResponseEntity<Object>(passwordData, HttpStatus.OK);
+	}
 	/*
 	 *  
 	 	******************** LOGIN API  **************************

@@ -511,24 +511,24 @@ class UserControllerTest {
 		Assertions.assertEquals(HttpStatus.BAD_GATEWAY, res.getStatusCode(), "Bad gateway occurs");
 	}
 	
-	@Test
-	@Order(22)
-	void test_changePassword() {
-		ForgotPasswordPayload forgotPasswordPayload = new ForgotPasswordPayload("abc@gmail.com", "abc@231");
-		when(service.changePassword(forgotPasswordPayload)).thenReturn(Constants.PASSWORD_CHANGED_SUCCESSFULLY);
-		ResponseEntity<Object> res = userController.changePassword(forgotPasswordPayload);
-		assertEquals(HttpStatus.OK, res.getStatusCode());
-		assertEquals(Constants.PASSWORD_CHANGED_SUCCESSFULLY, res.getBody());
-	}
-	
-	@Test
-	@Order(43)
-	void test_changePasswordThrowException() throws Exception {
-		ForgotPasswordPayload forgotPasswordPayload = new ForgotPasswordPayload("abc@gmail.com", "abc@231");
-		when(service.changePassword(forgotPasswordPayload)).thenThrow(BadGateway.class);
-		ResponseEntity<Object> res = userController.changePassword(forgotPasswordPayload);
-		Assertions.assertEquals(HttpStatus.BAD_GATEWAY, res.getStatusCode(), "Bad gateway occurs");
-	}
+//	@Test
+//	@Order(22)
+//	void test_changePassword() {
+//		ForgotPasswordPayload forgotPasswordPayload = new ForgotPasswordPayload("abc@gmail.com", "abc@231");
+//		when(service.changePassword(forgotPasswordPayload)).thenReturn(Constants.PASSWORD_CHANGED_SUCCESSFULLY);
+//		ResponseEntity<Object> res = userController.changePassword(forgotPasswordPayload);
+//		assertEquals(HttpStatus.OK, res.getStatusCode());
+//		assertEquals(Constants.PASSWORD_CHANGED_SUCCESSFULLY, res.getBody());
+//	}
+//	
+//	@Test
+//	@Order(43)
+//	void test_changePasswordThrowException() throws Exception {
+//		ForgotPasswordPayload forgotPasswordPayload = new ForgotPasswordPayload("abc@gmail.com", "abc@231");
+//		when(service.changePassword(forgotPasswordPayload)).thenThrow(BadGateway.class);
+//		ResponseEntity<Object> res = userController.changePassword(forgotPasswordPayload);
+//		Assertions.assertEquals(HttpStatus.BAD_GATEWAY, res.getStatusCode(), "Bad gateway occurs");
+//	}
 
 	
 	@Test

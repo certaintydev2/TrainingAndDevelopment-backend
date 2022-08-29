@@ -26,6 +26,8 @@ import com.example.usermicroservice.helper.QuestionStatus;
 import com.example.usermicroservice.helper.Questions;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
+import com.example.usermicroservice.payload.ChangePasswordPayload;
+import com.example.usermicroservice.payload.CheckPasswordPayload;
 import com.example.usermicroservice.payload.EmailPayload;
 import com.example.usermicroservice.payload.ForgotPasswordPayload;
 import com.example.usermicroservice.payload.OtpPayload;
@@ -342,7 +344,7 @@ public class UserServiceImpl implements UserService {
 	 * change password api
 	 */
 	@Override
-	public String changePassword(ForgotPasswordPayload forgotPasswordPayload) {
+	public String forgotPassword(ForgotPasswordPayload forgotPasswordPayload) {
 		
 		UserData user = this.userRepo.getUserByEmail(forgotPasswordPayload.getEmail());
 		user.setPassword(passwordEncoder.encode(forgotPasswordPayload.getNewPassword()));
@@ -691,5 +693,21 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		return traineeList;
+	}
+
+
+	@Override
+	public String changePassword(Long id, ChangePasswordPayload changePasswordPayload) {
+		UserData user = this.getUserById(id);
+		String encodedPassword=user.getPassword();
+		String oldPassword = changePasswordPayload.getOldPassword();
+		boolean checkPassword = this.passwordEncoder.matches(oldPassword, encodedPassword);
+		if(checkPassword) {
+			user.setPassword(this.passwordEncoder.encode(changePasswordPayload.getNewPassword()));
+			this.userRepo.save(user);
+			return "Password Changed Successfully";
+		}else {
+			return "Old Paasword not matched";
+		}
 	}
 }

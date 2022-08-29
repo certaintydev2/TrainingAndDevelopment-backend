@@ -11,6 +11,8 @@ import com.example.usermicroservice.helper.QuestionStatus;
 import com.example.usermicroservice.helper.Questions;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
+import com.example.usermicroservice.payload.ChangePasswordPayload;
+import com.example.usermicroservice.payload.CheckPasswordPayload;
 import com.example.usermicroservice.payload.EmailPayload;
 import com.example.usermicroservice.payload.ForgotPasswordPayload;
 import com.example.usermicroservice.payload.OtpPayload;
@@ -63,7 +65,9 @@ public interface UserService {
 	
 	public Integer sendOtp(OtpPayload otpPayload);
 	
-	public String changePassword(ForgotPasswordPayload forgotPasswordPayload);
+	public String forgotPassword(ForgotPasswordPayload forgotPasswordPayload);
+	
+	public String changePassword(Long id , ChangePasswordPayload changePasswordPayload);
 	
 	public List<Questions> getQuestionsByCourse(String course);
 	

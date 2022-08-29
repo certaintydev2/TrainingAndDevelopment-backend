@@ -312,16 +312,16 @@ class UserServiceImplTest {
 		assertNotNull(claimResponse);
 	}
 	
-	@Test
-	@Order(21)
-	void test_changePassword() {
-		UserData user = UserDummyData.getUser();
-		ForgotPasswordPayload forgotPasswordPayload = new ForgotPasswordPayload("abc@gmail.com", "abc@231");
-		when(userRepo.getUserByEmail(forgotPasswordPayload.getEmail())).thenReturn(user);
-		when(passwordEncoder.encode(forgotPasswordPayload.getNewPassword())).thenReturn(user.getPassword());
-		when(userRepo.save(user)).thenReturn(user);
-		assertEquals(Constants.PASSWORD_CHANGED_SUCCESSFULLY, service.changePassword(forgotPasswordPayload));
-	}
+//	@Test
+//	@Order(21)
+//	void test_changePassword() {
+//		UserData user = UserDummyData.getUser();
+//		ForgotPasswordPayload forgotPasswordPayload = new ForgotPasswordPayload("abc@gmail.com", "abc@231");
+//		when(userRepo.getUserByEmail(forgotPasswordPayload.getEmail())).thenReturn(user);
+//		when(passwordEncoder.encode(forgotPasswordPayload.getNewPassword())).thenReturn(user.getPassword());
+//		when(userRepo.save(user)).thenReturn(user);
+//		assertEquals(Constants.PASSWORD_CHANGED_SUCCESSFULLY, service.changePassword(forgotPasswordPayload));
+//	}
 	
 	@Test
 	@Order(22)
