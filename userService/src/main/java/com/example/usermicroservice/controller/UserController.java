@@ -104,6 +104,16 @@ public class UserController {
 		}
 	}
 	
+	@GetMapping("/getAllUsersExceptTraineeAndAdmin")
+	public ResponseEntity<List<UserData>> getAllUsersExceptTrainee() {
+		try {
+			List<UserData> users = this.userService.getAllUsersExceptTrainee();
+			return new ResponseEntity<List<UserData>>(users, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
 	/*
 	 * api to get User By Username
 	 */

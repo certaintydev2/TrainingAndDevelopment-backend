@@ -23,6 +23,8 @@ public interface UserService {
 	
 	public List<UserData> getAllUsersExceptAdmin();
 	
+	public List<UserData> getAllUsersExceptTrainee();
+	
 	public UserData getUserByUserName(String userName);
 	
 	public UserData getUserById(Long id);

@@ -710,4 +710,18 @@ public class UserServiceImpl implements UserService {
 			return "Old Paasword not matched";
 		}
 	}
+
+
+	@Override
+	public List<UserData> getAllUsersExceptTrainee() {
+		List<UserData> userList = this.getAllUsers();
+		for(UserData user : this.getAllUsers()) {
+			for(RoleModel role : user.getRoles()) {
+				if(role.getRoleName().equals(Constants.ROLE_ADMIN) || role.getRoleName().equals(Constants.ROLE_TRAINEE)) {
+					userList.remove(user);
+				}
+			}
+		}
+		return userList;
+	}
 }
