@@ -1,6 +1,9 @@
 package com.example.course.service;
 
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.course.dto.CourseDTO;
 import com.example.course.dto.QuestionDTO;
@@ -66,4 +69,6 @@ public interface CourseService {
 	public QuestionsStatus solveQuestion(Long id , QuestionStatusDTO questionStatusDTO);
 	
 	public QuestionsStatus getStatusByQuestionId(Long id);
+	
+	public Map<String, Object> getWholeCourseByCourseId(Long courseId);
 }

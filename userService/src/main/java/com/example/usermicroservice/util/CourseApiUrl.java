@@ -40,4 +40,5 @@ public class CourseApiUrl {
 	public static final String UPDATE_QUESTION_API_ENDPOINT = "http://COURSE-SERVICE//courses/updateQuestion/%d";
 	public static final String QUESTION_STATUS_API_ENDPOINT = "http://COURSE-SERVICE//courses/solveQuestion/%d";
 	public static final String QUESTION_STATUS_BY_QUESTION_ID_API_ENDPOINT = "http://COURSE-SERVICE//courses/getStatusByQuestionId/%d";
+	public static final String WHOLE_COURSE_BY_COURSE_ID = "http://COURSE-SERVICE//courses/getWholeCourseByCourseId/%d";
 }

@@ -1,6 +1,7 @@
 package com.example.usermicroservice.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +27,11 @@ import com.example.usermicroservice.config.CustomUserDetailsService;
 import com.example.usermicroservice.config.JwtUtil;
 import com.example.usermicroservice.dto.RoleDTO;
 import com.example.usermicroservice.dto.UserDTO;
+import com.example.usermicroservice.entity.AssignMentor;
 import com.example.usermicroservice.entity.AuthenticationResponse;
+import com.example.usermicroservice.entity.Profile;
 import com.example.usermicroservice.entity.RoleModel;
+import com.example.usermicroservice.entity.TestQuestions;
 import com.example.usermicroservice.entity.UserData;
 import com.example.usermicroservice.helper.Course;
 import com.example.usermicroservice.helper.QuestionStatus;
@@ -35,7 +39,6 @@ import com.example.usermicroservice.helper.Questions;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
 import com.example.usermicroservice.payload.ChangePasswordPayload;
-import com.example.usermicroservice.payload.CheckPasswordPayload;
 import com.example.usermicroservice.payload.EmailPayload;
 import com.example.usermicroservice.payload.ForgotPasswordPayload;
 import com.example.usermicroservice.payload.LoginPayload;
@@ -51,7 +54,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
@@ -74,11 +77,11 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	/*
-	 *   api to get all users from database
+	 * api to get all users from database
 	 */
-	
+
 	@GetMapping("/getAllUsers")
 	public ResponseEntity<List<UserData>> getAllUsers() {
 		try {
@@ -88,12 +91,21 @@ public class UserController {
 			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	
+
+	@PostMapping("/authenticate/addProfile")
+	public ResponseEntity<Profile> addProfile(@RequestBody Profile profile) {
+		try {
+			Profile profileData = this.userService.addProfile(profile);
+			return new ResponseEntity<Profile>(profileData, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Profile>(HttpStatus.CONFLICT);
+		}
+	}
+
 	/*
-	 *  api to get all users except admin
+	 * api to get all users except admin
 	 */
-	
+
 	@GetMapping("/getAllUsersExceptAdmin")
 	public ResponseEntity<List<UserData>> getAllUsersExceptAdmin() {
 		try {
@@ -103,7 +115,7 @@ public class UserController {
 			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping("/getAllUsersExceptTraineeAndAdmin")
 	public ResponseEntity<List<UserData>> getAllUsersExceptTrainee() {
 		try {
@@ -113,7 +125,7 @@ public class UserController {
 			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
 	 * api to get User By Username
 	 */
@@ -131,7 +143,7 @@ public class UserController {
 	/*
 	 * api to get User By Id
 	 */
-	
+
 	@GetMapping("/getUserById/{id}")
 	public ResponseEntity<UserData> getUserById(@PathVariable("id") Long id) {
 		try {
@@ -151,26 +163,26 @@ public class UserController {
 			return new ResponseEntity<UserData>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api for delete user by id
+	 * api for delete user by id
 	 */
 
 	@DeleteMapping("/deleteById/{id}")
-	public ResponseEntity<Object> deleteUser(@PathVariable("id") Long id){
+	public ResponseEntity<Object> deleteUser(@PathVariable("id") Long id) {
 		try {
 			return new ResponseEntity<Object>(this.userService.deleteUser(id), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Object>(Constants.USER_CANNOT_DELETE, HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
 	 * api for update user by id
 	 */
-	
+
 	@PutMapping("/updateUser/{id}")
-	public ResponseEntity<UserData> updateUser(@PathVariable("id") Long id , @RequestBody UserDTO userData) {
+	public ResponseEntity<UserData> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userData) {
 		try {
 			UserData user = this.userService.updateUser(id, userData);
 			return new ResponseEntity<UserData>(user, HttpStatus.OK);
@@ -178,11 +190,11 @@ public class UserController {
 			return new ResponseEntity<UserData>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
 	 * api to get all roles
 	 */
-	
+
 	@GetMapping("/authenticate/getAllRoles")
 	public ResponseEntity<List<RoleModel>> getAllRoles() {
 		try {
@@ -192,11 +204,11 @@ public class UserController {
 			return new ResponseEntity<List<RoleModel>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
-	 *  api for add roles
+	 * api for add roles
 	 */
-	
+
 	@PostMapping("/authenticate/add-roles")
 	public ResponseEntity<RoleModel> addRoles(@RequestBody RoleDTO roles) {
 		try {
@@ -206,9 +218,9 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api to get all user in List of string form
+	 * api to get all user in List of string form
 	 */
 
 	@GetMapping("/getUser")
@@ -220,7 +232,17 @@ public class UserController {
 			return new ResponseEntity<List<String>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
+	@GetMapping("/getUserProfile")
+	public ResponseEntity<List<String>> getUserProfile() {
+		try {
+			List<String> users = this.userService.getUserProfile();
+			return new ResponseEntity<List<String>>(users, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<List<String>>(HttpStatus.NOT_FOUND);
+		}
+	}
+
 	/*
 	 * api for add course
 	 */
@@ -229,16 +251,16 @@ public class UserController {
 	public ResponseEntity<Course> addCourse(@RequestBody Course course) {
 		try {
 			Course courseData = this.userService.addCourse(course);
-			if(courseData.getCourseId() != null) {
+			if (courseData.getCourseId() != null) {
 				return new ResponseEntity<Course>(courseData, HttpStatus.OK);
-			}else {
+			} else {
 				return new ResponseEntity<Course>(HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<Course>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
 	 * api for add topics
 	 */
@@ -257,14 +279,14 @@ public class UserController {
 			return new ResponseEntity<Topics>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
 	 * api for add subTopics
 	 */
 
 	@PostMapping("/add-sub_topics")
 	public ResponseEntity<SubTopic> addSubTopics(@RequestBody SubTopic subTopic) {
-		SubTopic subTopicData= null;
+		SubTopic subTopicData = null;
 		try {
 			subTopicData = this.userService.addSubTopics(subTopic);
 			if (subTopicData.getId() != null) {
@@ -272,12 +294,12 @@ public class UserController {
 			} else {
 				return new ResponseEntity<SubTopic>(HttpStatus.OK);
 			}
-			
+
 		} catch (Exception e) {
 			return new ResponseEntity<SubTopic>(HttpStatus.CONFLICT);
-		}	
+		}
 	}
-	
+
 	/*
 	 * api for add questions
 	 */
@@ -296,7 +318,7 @@ public class UserController {
 			return new ResponseEntity<Questions>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
 	 * api to get all courses
 	 */
@@ -310,7 +332,7 @@ public class UserController {
 			return new ResponseEntity<List<Course>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
 	 * api to get all topics
 	 */
@@ -324,7 +346,7 @@ public class UserController {
 			return new ResponseEntity<List<Topics>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
 	 * api to get all subtopics
 	 */
@@ -342,7 +364,7 @@ public class UserController {
 	/*
 	 * api to get all questions
 	 */
-	
+
 	@GetMapping("/getQuestions")
 	public ResponseEntity<List<Questions>> getQuestions() {
 		try {
@@ -352,9 +374,9 @@ public class UserController {
 			return new ResponseEntity<List<Questions>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
-	 *  api to get topics by courseId
+	 * api to get topics by courseId
 	 */
 
 	@GetMapping("/getTopicsById/{courseId}")
@@ -366,9 +388,9 @@ public class UserController {
 			return new ResponseEntity<List<Topics>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
-	 *  api to get subTopics by topicId
+	 * api to get subTopics by topicId
 	 */
 
 	@GetMapping("/getSubTopicsById/{topicId}")
@@ -380,11 +402,11 @@ public class UserController {
 			return new ResponseEntity<List<SubTopic>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
-	 *  api to get Questions by subTopicId
+	 * api to get Questions by subTopicId
 	 */
-	
+
 	@GetMapping("/getQuestionsById/{subTopicId}")
 	public ResponseEntity<List<Questions>> getQuestionsBySubTopicId(@PathVariable("subTopicId") Long subTopicId) {
 		try {
@@ -394,11 +416,11 @@ public class UserController {
 			return new ResponseEntity<List<Questions>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
-	 *  api for send email
+	 * api for send email
 	 */
-	
+
 	@PostMapping("/sendEmail")
 	public ResponseEntity<Object> sendEmail(@RequestBody EmailPayload emailPayload) {
 		try {
@@ -407,11 +429,11 @@ public class UserController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
-	
+
 	/*
-	 *  api for send otp
+	 * api for send otp
 	 */
-	
+
 	@PostMapping("/authenticate/send-otp")
 	public ResponseEntity<Object> sendOtp(@RequestBody OtpPayload otpPayload) {
 		try {
@@ -421,13 +443,13 @@ public class UserController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
-	
+
 	/*
-	 *  api for forgot password
+	 * api for forgot password
 	 */
-	
+
 	@PostMapping("/authenticate/forgotPassword")
-	public ResponseEntity<Object> forgotPassword(@RequestBody ForgotPasswordPayload forgotPasswordPayload){
+	public ResponseEntity<Object> forgotPassword(@RequestBody ForgotPasswordPayload forgotPasswordPayload) {
 		try {
 			String passwordData = this.userService.forgotPassword(forgotPasswordPayload);
 			return new ResponseEntity<Object>(passwordData, HttpStatus.OK);
@@ -435,17 +457,18 @@ public class UserController {
 			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
-	
+
 	@PostMapping("/changePassword/{id}")
-	public ResponseEntity<Object> changePassword(@PathVariable("id") Long id , @RequestBody ChangePasswordPayload changePasswordPayload) {
+	public ResponseEntity<Object> changePassword(@PathVariable("id") Long id,
+			@RequestBody ChangePasswordPayload changePasswordPayload) {
 		String passwordData = this.userService.changePassword(id, changePasswordPayload);
 		return new ResponseEntity<Object>(passwordData, HttpStatus.OK);
 	}
 	/*
-	 *  
-	 	******************** LOGIN API  **************************
-	 *  
-	*/
+	 * 
+	 ******************** LOGIN API **************************
+	 * 
+	 */
 
 	@PostMapping("/authenticate")
 	public ResponseEntity<Object> createAuthenticationToken(@RequestBody LoginPayload loginPayload) throws Exception {
@@ -470,11 +493,11 @@ public class UserController {
 			return new ResponseEntity<Object>(Constants.USER_INVALID, HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
-	 *  api to get questions by courseName
+	 * api to get questions by courseName
 	 */
-	
+
 	@GetMapping("/getQuestionsByCourse/{course}")
 	public ResponseEntity<List<Questions>> getQuestionsByCourse(@PathVariable("course") String course) {
 		try {
@@ -484,13 +507,13 @@ public class UserController {
 			return new ResponseEntity<List<Questions>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
-	 *  api for update course by courseId
+	 * api for update course by courseId
 	 */
-	
+
 	@PutMapping("/updateCourse/{courseId}")
-	public ResponseEntity<Course> updateCourse(@PathVariable("courseId") Long courseId , @RequestBody Course course) {
+	public ResponseEntity<Course> updateCourse(@PathVariable("courseId") Long courseId, @RequestBody Course course) {
 		try {
 			Course courseData = this.userService.updateCourse(courseId, course);
 			return new ResponseEntity<Course>(courseData, HttpStatus.OK);
@@ -498,13 +521,13 @@ public class UserController {
 			return new ResponseEntity<Course>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api to get course bt courseId
+	 * api to get course bt courseId
 	 */
 
 	@GetMapping("/getCourseByCourseId/{courseId}")
-	public ResponseEntity<Course> getCourseByCourseId(@PathVariable("courseId") Long courseId){
+	public ResponseEntity<Course> getCourseByCourseId(@PathVariable("courseId") Long courseId) {
 		try {
 			Course courseData = this.userService.getCourseByCourseId(courseId);
 			return new ResponseEntity<Course>(courseData, HttpStatus.OK);
@@ -512,13 +535,13 @@ public class UserController {
 			return new ResponseEntity<Course>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api for update Topic by id
+	 * api for update Topic by id
 	 */
-	
+
 	@PutMapping("/updateTopic/{id}")
-	public ResponseEntity<Topics> updateTopic(@PathVariable("id") Long id , @RequestBody Topics topic) {
+	public ResponseEntity<Topics> updateTopic(@PathVariable("id") Long id, @RequestBody Topics topic) {
 		try {
 			Topics topicData = this.userService.updateTopic(id, topic);
 			return new ResponseEntity<Topics>(topicData, HttpStatus.OK);
@@ -526,13 +549,13 @@ public class UserController {
 			return new ResponseEntity<Topics>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api to get topic by topicId
+	 * api to get topic by topicId
 	 */
-	
+
 	@GetMapping("/getTopicByTopicId/{id}")
-	public ResponseEntity<Topics> getTopicByTopicId(@PathVariable("id") Long id){
+	public ResponseEntity<Topics> getTopicByTopicId(@PathVariable("id") Long id) {
 		try {
 			Topics topicData = this.userService.getTopicByTopicId(id);
 			return new ResponseEntity<Topics>(topicData, HttpStatus.OK);
@@ -540,69 +563,69 @@ public class UserController {
 			return new ResponseEntity<Topics>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api for delete course by courseId
+	 * api for delete course by courseId
 	 */
-	
+
 	@DeleteMapping("/deleteCourse/{courseId}")
 	public ResponseEntity<String> deleteCourse(@PathVariable("courseId") Long courseId) {
 		try {
 			String message = this.userService.deleteCourse(courseId);
-			return new ResponseEntity<String>(message,HttpStatus.OK);
+			return new ResponseEntity<String>(message, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api for delete topic by topicId
+	 * api for delete topic by topicId
 	 */
-	
+
 	@DeleteMapping("/deleteTopic/{id}")
 	public ResponseEntity<String> deleteTopic(@PathVariable("id") Long id) {
 		try {
 			String message = this.userService.deleteTopic(id);
-			return new ResponseEntity<String>(message,HttpStatus.OK);
+			return new ResponseEntity<String>(message, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api for delete subTopic by subTopicId
+	 * api for delete subTopic by subTopicId
 	 */
-	
+
 	@DeleteMapping("/deleteSubTopic/{id}")
 	public ResponseEntity<String> deleteSubTopic(@PathVariable("id") Long id) {
 		try {
 			String message = this.userService.deleteSubTopic(id);
-			return new ResponseEntity<String>(message,HttpStatus.OK);
+			return new ResponseEntity<String>(message, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api for delete question by questionId
+	 * api for delete question by questionId
 	 */
-	
+
 	@DeleteMapping("/deleteQuestion/{id}")
 	public ResponseEntity<String> deleteQuestion(@PathVariable("id") Long id) {
 		try {
 			String message = this.userService.deleteQuestion(id);
-			return new ResponseEntity<String>(message,HttpStatus.OK);
+			return new ResponseEntity<String>(message, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api to get subTopic by subTopicId
+	 * api to get subTopic by subTopicId
 	 */
-	
+
 	@GetMapping("/getSubTopicBySubTopicId/{id}")
-	public ResponseEntity<SubTopic> getSubTopicBySubTopicId(@PathVariable("id") Long id){
+	public ResponseEntity<SubTopic> getSubTopicBySubTopicId(@PathVariable("id") Long id) {
 		try {
 			SubTopic subTopicData = this.userService.getSubTopicBySubTopicId(id);
 			return new ResponseEntity<SubTopic>(subTopicData, HttpStatus.OK);
@@ -610,13 +633,13 @@ public class UserController {
 			return new ResponseEntity<SubTopic>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api to get questions by questionId
+	 * api to get questions by questionId
 	 */
-	
+
 	@GetMapping("/getQuestionsByQuestionId/{id}")
-	public ResponseEntity<Questions> getQuestionsByQuestionId(@PathVariable("id") Long id){
+	public ResponseEntity<Questions> getQuestionsByQuestionId(@PathVariable("id") Long id) {
 		try {
 			Questions question = this.userService.getQuestionsByQuestionId(id);
 			return new ResponseEntity<Questions>(question, HttpStatus.OK);
@@ -624,13 +647,13 @@ public class UserController {
 			return new ResponseEntity<Questions>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api for udpate subTopic by subTopicId
+	 * api for udpate subTopic by subTopicId
 	 */
-	
+
 	@PutMapping("/updateSubTopic/{id}")
-	public ResponseEntity<SubTopic> updateSubTopic(@PathVariable("id") Long id , @RequestBody SubTopic subTopic) {
+	public ResponseEntity<SubTopic> updateSubTopic(@PathVariable("id") Long id, @RequestBody SubTopic subTopic) {
 		try {
 			SubTopic subTopicData = this.userService.updateSubTopic(id, subTopic);
 			return new ResponseEntity<SubTopic>(subTopicData, HttpStatus.OK);
@@ -638,13 +661,13 @@ public class UserController {
 			return new ResponseEntity<SubTopic>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
 	 * api for update question by questionId
 	 */
-	
+
 	@PutMapping("/updateQuestion/{id}")
-	public ResponseEntity<Questions> updateQuestion(@PathVariable("id") Long id , @RequestBody Questions question) {
+	public ResponseEntity<Questions> updateQuestion(@PathVariable("id") Long id, @RequestBody Questions question) {
 		try {
 			Questions questionData = this.userService.updateQuestion(id, question);
 			return new ResponseEntity<Questions>(questionData, HttpStatus.OK);
@@ -652,13 +675,14 @@ public class UserController {
 			return new ResponseEntity<Questions>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api for solve question by questionId
+	 * api for solve question by questionId
 	 */
-	
+
 	@PostMapping("/solveQuestion/{id}")
-	public ResponseEntity<QuestionStatus> solveQuestion(@PathVariable("id") Long id , @RequestBody QuestionStatus questionStatus) {
+	public ResponseEntity<QuestionStatus> solveQuestion(@PathVariable("id") Long id,
+			@RequestBody QuestionStatus questionStatus) {
 		try {
 			QuestionStatus questionData = this.userService.solveQuestion(id, questionStatus);
 			return new ResponseEntity<QuestionStatus>(questionData, HttpStatus.OK);
@@ -666,11 +690,11 @@ public class UserController {
 			return new ResponseEntity<QuestionStatus>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api to get status by questionId
+	 * api to get status by questionId
 	 */
-	
+
 	@GetMapping("/getStatusByQuestionId/{id}")
 	public ResponseEntity<QuestionStatus> getStatusByQuestionId(@PathVariable("id") Long id) {
 		try {
@@ -680,11 +704,11 @@ public class UserController {
 			return new ResponseEntity<QuestionStatus>(HttpStatus.CONFLICT);
 		}
 	}
-	
+
 	/*
-	 *  api to get author list
+	 * api to get author list
 	 */
-	
+
 	@GetMapping("/getAuthorList")
 	public ResponseEntity<List<UserData>> getAuthorList() {
 		try {
@@ -694,11 +718,11 @@ public class UserController {
 			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
-	 *  api to get mentor list
+	 * api to get mentor list
 	 */
-	
+
 	@GetMapping("/getMentorList")
 	public ResponseEntity<List<UserData>> getMentorList() {
 		try {
@@ -708,11 +732,11 @@ public class UserController {
 			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	/*
-	 *  api to get trainee list
+	 * api to get trainee list
 	 */
-	
+
 	@GetMapping("/getTraineeList")
 	public ResponseEntity<List<UserData>> getTraineeList() {
 		try {
@@ -722,5 +746,60 @@ public class UserController {
 			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
+	@PostMapping("/assignMentorToTrainee")
+	public ResponseEntity<AssignMentor> assignMentor(@RequestBody AssignMentor assignMentor) {
+		try {
+			AssignMentor assignMentorData = this.userService.assignMentor(assignMentor);
+			return new ResponseEntity<AssignMentor>(assignMentorData, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<AssignMentor>(HttpStatus.CONFLICT);
+		}
+	}
+
+	@GetMapping("/authenticate/getAllProfile")
+	public ResponseEntity<List<Profile>> getAllProfiles() {
+		try {
+			List<Profile> profileList = this.userService.getAllProfiles();
+			return new ResponseEntity<List<Profile>>(profileList, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<List<Profile>>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/getCourseByCourseName/{courseName}")
+	public ResponseEntity<Course> getCourseByCourseName(@PathVariable("courseName") String courseName) {
+		try {
+			Course courseData = this.userService.getCourseByCourseName(courseName);
+			return new ResponseEntity<Course>(courseData, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Course>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/getWholeCourseByCourseId/{courseId}")
+	public Map<String, Object> getWholeCourseByCourseId(@PathVariable("courseId") Long courseId) {
+		return this.userService.getWholeCourseByCourseId(courseId);
+	}
+
+	@PostMapping("/addTestQuestions")
+	public ResponseEntity<TestQuestions> addTestQuestions(@RequestBody TestQuestions testQuestions) {
+		try {
+			TestQuestions testQuestionsData = this.userService.addTestQuestions(testQuestions);
+			return new ResponseEntity<TestQuestions>(testQuestionsData, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<TestQuestions>(HttpStatus.CONFLICT);
+		}
+	}
+
+	@GetMapping("/getTestByProfile/{profile}")
+	public ResponseEntity<List<TestQuestions>> getQuestionsByProfile(@PathVariable("profile") String profile) {
+		try {
+			List<TestQuestions> questionsList = this.userService.getQuestionsByProfile(profile);
+			return new ResponseEntity<List<TestQuestions>>(questionsList, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<List<TestQuestions>>(HttpStatus.NOT_FOUND);
+		}
+	}
+
 }

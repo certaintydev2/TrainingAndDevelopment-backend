@@ -2,6 +2,7 @@ package com.example.usermicroservice.entity;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -36,7 +38,9 @@ public class UserData {
 	private String email;
 	private String userName;
 	private String password;
-	private String profile;
+	@ManyToMany
+    @JoinTable(name = "user_profile", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "profile_id"))
+	private List<Profile> profile;
 	@CreationTimestamp
 	private Date createdAt;
 	@UpdateTimestamp
@@ -44,18 +48,5 @@ public class UserData {
 
 	@ManyToMany
 	@JoinTable(name = "users_roles_tab", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
-	private List<RoleModel> roles;
-
-	
-	public UserData(Long id, String name, String email, String userName, String password, String profile,
-			List<RoleModel> roles) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.userName = userName;
-		this.password = password;
-		this.profile = profile;
-		this.roles = roles;
-	}
+	private List<RoleModel> roles;	
 }

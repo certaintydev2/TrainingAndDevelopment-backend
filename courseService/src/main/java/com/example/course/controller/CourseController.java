@@ -1,6 +1,7 @@
 package com.example.course.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -355,5 +356,10 @@ public class CourseController {
 	@GetMapping("/getStatusByQuestionId/{id}")
 	public QuestionsStatus getStatusByQuestionId(@PathVariable("id") Long id) {
 		return this.courseService.getStatusByQuestionId(id);
+	}
+	
+	@GetMapping("/getWholeCourseByCourseId/{courseId}")
+	public Map<String, Object> getWholeCourseByCourseId(@PathVariable("courseId") Long courseId) {
+		return this.courseService.getWholeCourseByCourseId(courseId);
 	}
 }

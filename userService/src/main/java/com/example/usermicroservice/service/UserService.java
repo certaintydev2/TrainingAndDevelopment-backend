@@ -1,10 +1,16 @@
 package com.example.usermicroservice.service;
 
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.usermicroservice.dto.RoleDTO;
 import com.example.usermicroservice.dto.UserDTO;
+import com.example.usermicroservice.entity.AssignMentor;
+import com.example.usermicroservice.entity.Profile;
 import com.example.usermicroservice.entity.RoleModel;
+import com.example.usermicroservice.entity.TestQuestions;
 import com.example.usermicroservice.entity.UserData;
 import com.example.usermicroservice.helper.Course;
 import com.example.usermicroservice.helper.QuestionStatus;
@@ -33,9 +39,13 @@ public interface UserService {
 	
 	public UserData addUserData(UserDTO user);
 	
+	public Profile addProfile(Profile profile);
+	
 	public String deleteUser(Long id);
 	
 	public List<String> getUser();
+	
+	public List<String> getUserProfile();
 	
 	public UserData updateUser(Long id , UserDTO user);
 	
@@ -106,4 +116,16 @@ public interface UserService {
 	public List<UserData> getMentorList();
 	
 	public List<UserData> getTraineeList();
+	
+	public AssignMentor assignMentor(AssignMentor assignMentor);
+	
+	public List<Profile> getAllProfiles();
+	
+	public Course getCourseByCourseName(String courseName);
+	
+	public Map<String, Object> getWholeCourseByCourseId(Long courseId);
+	
+	public TestQuestions addTestQuestions(TestQuestions testQuestions);
+	
+	public List<TestQuestions> getQuestionsByProfile(String profile);
 }

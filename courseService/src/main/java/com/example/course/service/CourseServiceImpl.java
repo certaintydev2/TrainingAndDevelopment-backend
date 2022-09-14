@@ -1,6 +1,9 @@
 package com.example.course.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +51,6 @@ public class CourseServiceImpl implements CourseService {
 		Course courseData = new Course();
 		courseData.setCourseName(course.getCourseName());
 		courseData.setAuthorId(course.getAuthorId());
-		courseData.setMentorId(course.getMentorId());
 		return this.courseRepo.save(courseData);
 	}
 
@@ -160,7 +162,6 @@ public class CourseServiceImpl implements CourseService {
 		Course course = this.courseRepo.getById(courseId);
 		course.setCourseName(courseDTO.getCourseName());
 		course.setAuthorId(courseDTO.getAuthorId());
-		course.setMentorId(courseDTO.getMentorId());
 		return this.courseRepo.save(course);
 	}
 
@@ -297,6 +298,26 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public QuestionsStatus getStatusByQuestionId(Long id) {
 		return this.questionStatusRepo.findStatusByQuestionId(id);
+	}
+
+	@Override
+	public Map<String, Object> getWholeCourseByCourseId(Long courseId) {
+		Course course = this.courseRepo.findCourseByCourseId(courseId); // here we get course by courseId
+		List<Topics> topics_list = this.topicRepo.findTopicByCourseId(courseId); // here we get topic list by courseId
+		List<SubTopic> subTopics_list = new ArrayList<SubTopic>();
+		List<Questions> questions_list = new ArrayList<Questions>();
+		for(Topics topic : topics_list) {
+			subTopics_list.addAll(this.subTopicRepo.findSubTopicByTopicId(topic.getId()));
+		}
+		for(SubTopic subTopic : subTopics_list) {
+			questions_list.addAll(this.questionRepo.findQuestionsBySubTopicId(subTopic.getId())); 
+		}
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("course", course);
+		data.put("topics", topics_list);
+		data.put("subTopics", subTopics_list);
+		data.put("questions", questions_list);
+		return data;
 	}
 
 }

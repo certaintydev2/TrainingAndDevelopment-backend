@@ -1,4 +1,4 @@
-package com.example.course.entity;
+package com.example.usermicroservice.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,18 +13,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "course")
+@Table(name = "test_questions_tab")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Course {
+public class TestQuestions {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "courseId")
-	private Long courseId;
-	private String courseName;
-	private Long authorId;
-//	private Long mentorId;
+	@Column(name = "question_id")
+	private Long id;
+	private String profile;
+	private String question;
+	private String expectedOutput;
 }

@@ -30,8 +30,11 @@ public interface UserRepository extends JpaRepository<UserData, Long>{
 	public Long getRoleIdByRoleName();
 	
 	
-	@Query(value = "select user_tab.name , user_tab.user_id , role_tab.role_name , user_tab.profile from user_tab join users_roles_tab on user_tab.user_id = users_roles_tab.user_id join role_tab on role_tab.role_id = users_roles_tab.role_id;" , nativeQuery = true)
+	@Query(value = "select user_tab.name , user_tab.user_id , role_tab.role_name from user_tab join users_roles_tab on user_tab.user_id = users_roles_tab.user_id join role_tab on role_tab.role_id = users_roles_tab.role_id;" , nativeQuery = true)
 	public List<String> getUserData();
+	
+	@Query(value = "select user_tab.name , user_tab.user_id , profile.profile_name, profile.id from user_tab join user_profile on user_tab.user_id = user_profile.user_id join profile on profile.id = user_profile.profile_id;" , nativeQuery = true)
+	public List<String> getUserProfileData();
 	
 	@Query(value = "select user_id from users_roles_tab where role_id = ?1" , nativeQuery = true)
 	public List<Long> getUserIdByRoleId(@Param("role_id") Long roleId);

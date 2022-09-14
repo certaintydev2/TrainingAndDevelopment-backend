@@ -1,7 +1,9 @@
 package com.example.usermicroservice.dto;
 
 import java.util.List;
+import java.util.Set;
 
+import com.example.usermicroservice.entity.Profile;
 import com.example.usermicroservice.entity.RoleModel;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +17,6 @@ public class UserDTO {
 	private String email;
 	private String userName;
 	private String password;
-	private String profile;
+	private List<Profile> profile;
 	private List<RoleModel> roles;
 }

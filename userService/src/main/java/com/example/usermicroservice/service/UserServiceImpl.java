@@ -1,7 +1,9 @@
 package com.example.usermicroservice.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -19,7 +21,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.example.usermicroservice.dto.RoleDTO;
 import com.example.usermicroservice.dto.UserDTO;
+import com.example.usermicroservice.entity.AssignMentor;
+import com.example.usermicroservice.entity.Profile;
 import com.example.usermicroservice.entity.RoleModel;
+import com.example.usermicroservice.entity.TestQuestions;
 import com.example.usermicroservice.entity.UserData;
 import com.example.usermicroservice.helper.Course;
 import com.example.usermicroservice.helper.QuestionStatus;
@@ -27,11 +32,13 @@ import com.example.usermicroservice.helper.Questions;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
 import com.example.usermicroservice.payload.ChangePasswordPayload;
-import com.example.usermicroservice.payload.CheckPasswordPayload;
 import com.example.usermicroservice.payload.EmailPayload;
 import com.example.usermicroservice.payload.ForgotPasswordPayload;
 import com.example.usermicroservice.payload.OtpPayload;
+import com.example.usermicroservice.repository.AssignMentorRepository;
+import com.example.usermicroservice.repository.ProfileRepository;
 import com.example.usermicroservice.repository.RoleRepository;
+import com.example.usermicroservice.repository.TestQuestionsRepository;
 import com.example.usermicroservice.repository.UserRepository;
 import com.example.usermicroservice.util.Constants;
 import com.example.usermicroservice.util.CourseApiUrl;
@@ -54,6 +61,15 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private JavaMailSender javaMailSender;
+	
+	@Autowired
+	private ProfileRepository profileRepo;
+	
+	@Autowired
+	private TestQuestionsRepository testQuestionsRepo;
+	
+	@Autowired
+	private AssignMentorRepository assignMentorRepo;
 	
 	Random random = new Random(1000);	
 	
@@ -127,7 +143,7 @@ public class UserServiceImpl implements UserService {
 		course.setCourseId(courses.getCourseId());
 		course.setCourseName(courses.getCourseName());
 		course.setAuthorId(courses.getAuthorId());
-		course.setMentorId(courses.getMentorId());
+//		course.setMentorId(courses.getMentorId());
 		return course;
 	}
 
@@ -415,7 +431,7 @@ public class UserServiceImpl implements UserService {
 		course.setCourseId(courseId);
 		course.setCourseName(courseData.getCourseName());
 		course.setAuthorId(courseData.getAuthorId());
-		course.setMentorId(courseData.getMentorId());
+//		course.setMentorId(courseData.getMentorId());
 		return course;
 	}
 
@@ -724,4 +740,70 @@ public class UserServiceImpl implements UserService {
 		}
 		return userList;
 	}
+
+
+	@Override
+	public Profile addProfile(Profile profile) {
+		return this.profileRepo.save(profile);
+	}
+
+
+	@Override
+	public AssignMentor assignMentor(AssignMentor assignMentor) {
+		return this.assignMentorRepo.save(assignMentor);
+	}
+
+
+	@Override
+	public List<Profile> getAllProfiles() {
+		return this.profileRepo.findAll();
+	}
+
+
+	@Override
+	public List<String> getUserProfile() {
+		return this.userRepo.getUserProfileData();
+	}
+
+
+	@Override
+	public Course getCourseByCourseName(String courseName) {
+		Course courseData = new Course();
+		ResponseEntity<Course> claimResponse = restTemplate.exchange(
+				String.format(CourseApiUrl.COURSE_BY_COURSE_NAME_API_ENDPOINT, courseName), HttpMethod.GET, null,
+				new ParameterizedTypeReference<Course>() {
+				});// call get course by coursename  api from course service by resttemplate
+		if (claimResponse != null && claimResponse.hasBody()) {
+			courseData = claimResponse.getBody();
+		}
+		return courseData;
+	}
+
+
+	@Override
+	public Map<String, Object> getWholeCourseByCourseId(Long courseId) {
+		Map<String, Object> data = new HashMap<String, Object>();
+		ResponseEntity<Map<String, Object>> claimResponse = restTemplate.exchange(
+				String.format(CourseApiUrl.WHOLE_COURSE_BY_COURSE_ID, courseId), HttpMethod.GET, null,
+				new ParameterizedTypeReference<Map<String, Object>>() {
+				});
+		if (claimResponse != null && claimResponse.hasBody()) {
+			data = claimResponse.getBody();
+		}
+		return data;
+	}
+
+
+	@Override
+	public TestQuestions addTestQuestions(TestQuestions testQuestions) {
+		return this.testQuestionsRepo.save(testQuestions);
+	}
+
+
+	@Override
+	public List<TestQuestions> getQuestionsByProfile(String profile) {
+		return this.testQuestionsRepo.getQuestionsByProfile(profile);
+	}
+	
+	
 }

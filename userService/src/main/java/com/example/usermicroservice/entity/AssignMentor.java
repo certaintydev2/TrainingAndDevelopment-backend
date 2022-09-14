@@ -1,6 +1,5 @@
-package com.example.course.entity;
+package com.example.usermicroservice.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,18 +12,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "course")
+@Table(name = "assignMentor")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Course {
-
+public class AssignMentor {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "courseId")
-	private Long courseId;
-	private String courseName;
-	private Long authorId;
-//	private Long mentorId;
+	private Long id;
+	private String profile;
+	private Long traineeId;
+	private Long mentorId;
 }
