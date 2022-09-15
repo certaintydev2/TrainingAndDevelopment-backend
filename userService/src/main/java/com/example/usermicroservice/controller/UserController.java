@@ -811,5 +811,15 @@ public class UserController {
 			return new ResponseEntity<List<AssignMentor>>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/getAssignMentorBytraineeId/{traineeId}")
+	public ResponseEntity<AssignMentor> getAssignMentorByTraineeId(@PathVariable("traineeId") Long traineeId){
+		try {
+			AssignMentor assignMentorData = this.userService.getAssignMentorByTraineeId(traineeId);
+			return new ResponseEntity<AssignMentor>(assignMentorData,HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<AssignMentor>(HttpStatus.NOT_FOUND);
+		}
+	}
 
 }

@@ -3,8 +3,6 @@ package com.example.usermicroservice.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.example.usermicroservice.dto.RoleDTO;
 import com.example.usermicroservice.dto.UserDTO;
 import com.example.usermicroservice.entity.AssignMentor;
@@ -18,7 +16,6 @@ import com.example.usermicroservice.helper.Questions;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
 import com.example.usermicroservice.payload.ChangePasswordPayload;
-import com.example.usermicroservice.payload.CheckPasswordPayload;
 import com.example.usermicroservice.payload.EmailPayload;
 import com.example.usermicroservice.payload.ForgotPasswordPayload;
 import com.example.usermicroservice.payload.OtpPayload;
@@ -130,4 +127,6 @@ public interface UserService {
 	public List<TestQuestions> getQuestionsByProfile(String profile);
 	
 	public List<AssignMentor> getAssignedMentorList();
+	
+	public AssignMentor getAssignMentorByTraineeId(Long traineeId);
 }

@@ -810,6 +810,12 @@ public class UserServiceImpl implements UserService {
 	public List<AssignMentor> getAssignedMentorList() {
 		return this.assignMentorRepo.findAll();
 	}
+
+
+	@Override
+	public AssignMentor getAssignMentorByTraineeId(Long traineeId) {
+		return this.assignMentorRepo.getAssignMentorByTraineeId(traineeId);
+	}
 	
 	
 }
