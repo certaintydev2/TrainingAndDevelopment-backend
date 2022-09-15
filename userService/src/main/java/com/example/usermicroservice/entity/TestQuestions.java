@@ -25,6 +25,10 @@ public class TestQuestions {
 	@Column(name = "question_id")
 	private Long id;
 	private String profile;
+	@Column(length = 4000)
 	private String question;
+	@Column(length = 500)
+	private String input;
+	@Column(length = 500)
 	private String expectedOutput;
 }
