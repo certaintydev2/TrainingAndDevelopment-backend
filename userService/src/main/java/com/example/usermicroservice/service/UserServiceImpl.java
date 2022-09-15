@@ -804,6 +804,12 @@ public class UserServiceImpl implements UserService {
 	public List<TestQuestions> getQuestionsByProfile(String profile) {
 		return this.testQuestionsRepo.getQuestionsByProfile(profile);
 	}
+
+
+	@Override
+	public List<AssignMentor> getAssignedMentorList() {
+		return this.assignMentorRepo.findAll();
+	}
 	
 	
 }

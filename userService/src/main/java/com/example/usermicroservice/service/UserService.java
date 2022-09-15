@@ -128,4 +128,6 @@ public interface UserService {
 	public TestQuestions addTestQuestions(TestQuestions testQuestions);
 	
 	public List<TestQuestions> getQuestionsByProfile(String profile);
+	
+	public List<AssignMentor> getAssignedMentorList();
 }

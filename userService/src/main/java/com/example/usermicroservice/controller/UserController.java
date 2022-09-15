@@ -801,5 +801,15 @@ public class UserController {
 			return new ResponseEntity<List<TestQuestions>>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/getAssignedMentorList")
+	public ResponseEntity<List<AssignMentor>> getAssignedMentorList(){
+		try {
+			List<AssignMentor> assignMentorList = this.userService.getAssignedMentorList();
+			return new ResponseEntity<List<AssignMentor>>(assignMentorList, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<List<AssignMentor>>(HttpStatus.NOT_FOUND);
+		}
+	}
 
 }
