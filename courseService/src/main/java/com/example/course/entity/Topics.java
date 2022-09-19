@@ -30,6 +30,10 @@ public class Topics {
 	@Column(name = "topicId")
 	private Long id;
 	private String topicName;
+	@Column(length = 4000)
+	private String topicDescription;
+	private Integer days;
+	private String estimatedTime;
 
 	@ManyToOne(fetch = FetchType.LAZY,optional = false)
 	@JoinColumn(name = "courseId", nullable = false)

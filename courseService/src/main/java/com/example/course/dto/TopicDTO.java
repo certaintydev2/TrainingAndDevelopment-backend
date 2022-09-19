@@ -17,5 +17,8 @@ public class TopicDTO {
 	
 	private String topicName;
 	private Course course;
+	private String topicDescription;
+	private Integer days;
+	private String estimatedTime;
 
 }

@@ -51,6 +51,7 @@ public class CourseServiceImpl implements CourseService {
 		Course courseData = new Course();
 		courseData.setCourseName(course.getCourseName());
 		courseData.setAuthorId(course.getAuthorId());
+		courseData.setCourseDescription(course.getCourseDescription());
 		return this.courseRepo.save(courseData);
 	}
 
@@ -63,6 +64,9 @@ public class CourseServiceImpl implements CourseService {
 		Course course = this.courseRepo.findCourseByCourseName(topics.getCourse().getCourseName());
 		topic.setTopicName(topics.getTopicName());
 		topic.setCourse(course);
+		topic.setTopicDescription(topics.getTopicDescription());
+		topic.setDays(topics.getDays());
+		topic.setEstimatedTime(topics.getEstimatedTime());
 		return this.topicRepo.save(topic);
 	}
 

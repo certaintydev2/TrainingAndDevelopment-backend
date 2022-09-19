@@ -1,11 +1,13 @@
 package com.example.usermicroservice.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.usermicroservice.config.CustomUserDetailsService;
 import com.example.usermicroservice.config.JwtUtil;
@@ -56,7 +60,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 
 	private static Logger logger = LoggerFactory.getLogger(UserController.class);
-
+	
 	@Autowired
 	private UserRepository userRepo;
 
@@ -821,5 +825,10 @@ public class UserController {
 			return new ResponseEntity<AssignMentor>(HttpStatus.NOT_FOUND);
 		}
 	}
-
+	
+	@PostMapping("/solveTest")
+	public String solveTest(@RequestParam("file") MultipartFile file, @RequestParam("traineeId") Long traineeId, 
+			@RequestParam("questionId") Long questionId) throws IllegalStateException, IOException {
+		return this.userService.solveTest(file, traineeId, questionId);
+	}
 }
