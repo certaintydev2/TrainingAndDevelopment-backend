@@ -26,7 +26,7 @@ import lombok.Setter;
 public class Topics {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "topicId")
 	private Long id;
 	private String topicName;

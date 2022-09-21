@@ -31,7 +31,7 @@ import lombok.Setter;
 public class UserData {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "userId")
 	private Long id;
 	private String name;

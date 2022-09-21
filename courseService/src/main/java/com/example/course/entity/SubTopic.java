@@ -26,8 +26,8 @@ import lombok.Setter;
 public class SubTopic {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "subTopicId")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String subTopicName;
 
