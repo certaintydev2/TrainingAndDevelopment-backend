@@ -14,13 +14,17 @@ import com.example.course.dto.QuestionStatusDTO;
 import com.example.course.dto.SubTopicDTO;
 import com.example.course.dto.TopicDTO;
 import com.example.course.entity.Course;
+import com.example.course.entity.OnlineAssessmentLinks;
 import com.example.course.entity.Questions;
 import com.example.course.entity.QuestionsStatus;
+import com.example.course.entity.RefrenceLinks;
 import com.example.course.entity.SubTopic;
 import com.example.course.entity.Topics;
 import com.example.course.repository.CourseRepository;
+import com.example.course.repository.OnlineAssessmentLinksRepository;
 import com.example.course.repository.QuestionRepository;
 import com.example.course.repository.QuestionStatusRepository;
+import com.example.course.repository.RefrenceLinkRepository;
 import com.example.course.repository.SubTopicRepository;
 import com.example.course.repository.TopicRepository;
 import com.example.course.util.Constants;
@@ -42,6 +46,12 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Autowired
 	private QuestionStatusRepository questionStatusRepo;
+	
+	@Autowired
+	private RefrenceLinkRepository refrenceLinkRepo;
+	
+	@Autowired
+	private OnlineAssessmentLinksRepository onlineAssessmentLinkRepo;
 
 	/*
 	 * here course added to database to database
@@ -79,6 +89,7 @@ public class CourseServiceImpl implements CourseService {
 		Topics topics = this.topicRepo.findTopicByTopicName(subTopic.getTopic().getTopicName());
 		subTopicData.setSubTopicName(subTopic.getSubTopicName());
 		subTopicData.setTopic(topics);
+		subTopicData.setSubTopicDescription(subTopic.getSubTopicDescription());
 		return this.subTopicRepo.save(subTopicData);
 	}
 
@@ -322,6 +333,26 @@ public class CourseServiceImpl implements CourseService {
 		data.put("subTopics", subTopics_list);
 		data.put("questions", questions_list);
 		return data;
+	}
+
+	@Override
+	public RefrenceLinks addRefrenceLinks(RefrenceLinks refrenceLinks) {
+		return this.refrenceLinkRepo.save(refrenceLinks);
+	}
+
+	@Override
+	public List<RefrenceLinks> getLinksBySubTopicId(Long subTopicId) {
+		return this.refrenceLinkRepo.findRefrenceLinksBySubTopicId(subTopicId);
+	}
+
+	@Override
+	public OnlineAssessmentLinks addOnlineAssessmentLinks(OnlineAssessmentLinks onlineAssessmentLinks) {
+		return this.onlineAssessmentLinkRepo.save(onlineAssessmentLinks);
+	}
+
+	@Override
+	public List<OnlineAssessmentLinks> getAssessmentLinksBySubTopicId(Long subTopicId) {
+		return this.onlineAssessmentLinkRepo.findAssessmentinksBySubTopicId(subTopicId);
 	}
 
 }

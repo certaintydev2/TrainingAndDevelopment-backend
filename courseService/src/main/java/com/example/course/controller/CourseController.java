@@ -20,8 +20,10 @@ import com.example.course.dto.QuestionStatusDTO;
 import com.example.course.dto.SubTopicDTO;
 import com.example.course.dto.TopicDTO;
 import com.example.course.entity.Course;
+import com.example.course.entity.OnlineAssessmentLinks;
 import com.example.course.entity.Questions;
 import com.example.course.entity.QuestionsStatus;
+import com.example.course.entity.RefrenceLinks;
 import com.example.course.entity.SubTopic;
 import com.example.course.entity.Topics;
 import com.example.course.repository.CourseRepository;
@@ -361,5 +363,25 @@ public class CourseController {
 	@GetMapping("/getWholeCourseByCourseId/{courseId}")
 	public Map<String, Object> getWholeCourseByCourseId(@PathVariable("courseId") Long courseId) {
 		return this.courseService.getWholeCourseByCourseId(courseId);
+	}
+	
+	@PostMapping("/addRefrenceLinks")
+	public RefrenceLinks addRefrenceLinks(@RequestBody RefrenceLinks refrenceLinks) {
+		return this.courseService.addRefrenceLinks(refrenceLinks);
+	}
+	
+	@GetMapping("/getLinksBySubTopicId/{subTopicId}")
+	public List<RefrenceLinks> getLinksBySubTopicId(@PathVariable("subTopicId") Long subTopicId){
+		return this.courseService.getLinksBySubTopicId(subTopicId);
+	}
+	
+	@PostMapping("/addOnlineAssessmentLinks")
+	public OnlineAssessmentLinks addOnlineAssessmentLinks(@RequestBody OnlineAssessmentLinks onlineAssessmentLinks) {
+		return this.courseService.addOnlineAssessmentLinks(onlineAssessmentLinks);
+	}
+	
+	@GetMapping("/getAssessmentLinksBySubTopicId/{subTopicId}")
+	public List<OnlineAssessmentLinks> getAssessmentLinksBySubTopicId(@PathVariable("subTopicId") Long subTopicId){
+		return this.courseService.getAssessmentLinksBySubTopicId(subTopicId);
 	}
 }

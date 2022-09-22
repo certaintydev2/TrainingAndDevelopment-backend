@@ -15,5 +15,5 @@ public class SubTopicDTO {
 	
 	private String subTopicName;
 	private Topics topic;
-
+	private String subTopicDescription;
 }

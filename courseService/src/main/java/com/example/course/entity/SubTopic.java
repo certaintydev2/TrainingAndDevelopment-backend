@@ -30,6 +30,8 @@ public class SubTopic {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String subTopicName;
+	@Column(length = 3000)
+	private String subTopicDescription;
 
 	@ManyToOne(fetch = FetchType.LAZY,optional = false)
 	@JoinColumn(name = "topicId", nullable = false)

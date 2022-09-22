@@ -11,8 +11,10 @@ import com.example.course.dto.QuestionStatusDTO;
 import com.example.course.dto.SubTopicDTO;
 import com.example.course.dto.TopicDTO;
 import com.example.course.entity.Course;
+import com.example.course.entity.OnlineAssessmentLinks;
 import com.example.course.entity.Questions;
 import com.example.course.entity.QuestionsStatus;
+import com.example.course.entity.RefrenceLinks;
 import com.example.course.entity.SubTopic;
 import com.example.course.entity.Topics;
 
@@ -71,4 +73,12 @@ public interface CourseService {
 	public QuestionsStatus getStatusByQuestionId(Long id);
 	
 	public Map<String, Object> getWholeCourseByCourseId(Long courseId);
+	
+	public RefrenceLinks addRefrenceLinks(RefrenceLinks refrenceLinks);
+	
+	public List<RefrenceLinks> getLinksBySubTopicId(Long subTopicId);
+	
+	public OnlineAssessmentLinks addOnlineAssessmentLinks(OnlineAssessmentLinks onlineAssessmentLinks);
+	
+	public List<OnlineAssessmentLinks> getAssessmentLinksBySubTopicId(Long subTopicId);
 }
