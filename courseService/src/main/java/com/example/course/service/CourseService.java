@@ -3,8 +3,6 @@ package com.example.course.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.example.course.dto.CourseDTO;
 import com.example.course.dto.QuestionDTO;
 import com.example.course.dto.QuestionStatusDTO;

@@ -9,10 +9,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SubTopic {
+public class OnlineAssessmentLinks {
 
 	private Long id;
-	private String subTopicName;
-	private Topics topic;
-	private String subTopicDescription;
+	private String assessmentLinks;
+	private SubTopic subTopic;
 }

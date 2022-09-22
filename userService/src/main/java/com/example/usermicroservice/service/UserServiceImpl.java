@@ -32,8 +32,10 @@ import com.example.usermicroservice.entity.SolveTest;
 import com.example.usermicroservice.entity.TestQuestions;
 import com.example.usermicroservice.entity.UserData;
 import com.example.usermicroservice.helper.Course;
+import com.example.usermicroservice.helper.OnlineAssessmentLinks;
 import com.example.usermicroservice.helper.QuestionStatus;
 import com.example.usermicroservice.helper.Questions;
+import com.example.usermicroservice.helper.RefrenceLinks;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
 import com.example.usermicroservice.payload.ChangePasswordPayload;
@@ -150,15 +152,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public Course addCourse(Course course) {
-		Course courses = this.restTemplate.postForObject(CourseApiUrl.ADD_COURSE_API_ENDPOINT, course, Course.class); // call
-																														// add
-																														// course
-																														// api
-																														// of
-																														// course
-																														// service
-																														// by
-																														// resttemplate
+		Course courses = this.restTemplate.postForObject(CourseApiUrl.ADD_COURSE_API_ENDPOINT, course, Course.class); 
 		course.setCourseId(courses.getCourseId());
 		course.setCourseName(courses.getCourseName());
 		course.setAuthorId(courses.getAuthorId());
@@ -171,15 +165,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public Topics addTopics(Topics topics) {
-		Topics topicsData = this.restTemplate.postForObject(CourseApiUrl.ADD_TOPICS_API_ENDPOINT, topics, Topics.class);// call
-																														// add
-																														// topic
-																														// api
-																														// of
-																														// course
-																														// service
-																														// by
-																														// resttemplate
+		Topics topicsData = this.restTemplate.postForObject(CourseApiUrl.ADD_TOPICS_API_ENDPOINT, topics, Topics.class);
 		topics.setId(topicsData.getId());
 		topics.setTopicName(topicsData.getTopicName());
 		topics.setCourse(topicsData.getCourse());
@@ -200,6 +186,7 @@ public class UserServiceImpl implements UserService {
 		subTopic.setId(subTopicData.getId());
 		subTopic.setSubTopicName(subTopicData.getSubTopicName());
 		subTopic.setTopic(subTopicData.getTopic());
+		subTopic.setSubTopicDescription(subTopicData.getSubTopicDescription());
 		return subTopic;
 	}
 
@@ -497,15 +484,7 @@ public class UserServiceImpl implements UserService {
 	public Topics getTopicByTopicId(Long id) {
 		Topics topicData = new Topics();
 		ResponseEntity<Topics> claimResponse = restTemplate.exchange(
-				String.format(CourseApiUrl.TOPIC_BY_TOPIC_ID_API_ENDPOINT, id), HttpMethod.GET, null, Topics.class);// call
-																													// get
-																													// topic
-																													// by
-																													// topicId
-																													// api
-																													// from
-																													// course
-																													// service
+				String.format(CourseApiUrl.TOPIC_BY_TOPIC_ID_API_ENDPOINT, id), HttpMethod.GET, null, Topics.class);
 		if (claimResponse != null && claimResponse.hasBody()) {
 			topicData = claimResponse.getBody();
 		}
@@ -534,13 +513,7 @@ public class UserServiceImpl implements UserService {
 	public String deleteTopic(Long id) {
 		String message = "";
 		ResponseEntity<String> claimResponse = restTemplate.exchange(
-				String.format(CourseApiUrl.DELETE_TOPIC_API_ENDPOINT, id), HttpMethod.DELETE, null, String.class); // call
-																													// delete
-																													// topic
-																													// api
-																													// from
-																													// course
-																													// service
+				String.format(CourseApiUrl.DELETE_TOPIC_API_ENDPOINT, id), HttpMethod.DELETE, null, String.class); 
 		if (claimResponse != null && claimResponse.hasBody()) {
 			message = claimResponse.getBody();
 		}
@@ -574,13 +547,7 @@ public class UserServiceImpl implements UserService {
 	public String deleteSubTopic(Long id) {
 		String message = "";
 		ResponseEntity<String> claimResponse = restTemplate.exchange(
-				String.format(CourseApiUrl.DELETE_SUB_TOPIC_API_ENDPOINT, id), HttpMethod.DELETE, null, String.class);// call
-																														// delete
-																														// subtopic
-																														// api
-																														// from
-																														// course
-																														// service
+				String.format(CourseApiUrl.DELETE_SUB_TOPIC_API_ENDPOINT, id), HttpMethod.DELETE, null, String.class);
 		if (claimResponse != null && claimResponse.hasBody()) {
 			message = claimResponse.getBody();
 		}
@@ -858,5 +825,49 @@ public class UserServiceImpl implements UserService {
 			return "file uploaded successfully : " + filePath;
 		}
 		return null;
+	}
+
+	@Override
+	public RefrenceLinks addRefrenceLinks(RefrenceLinks refrenceLinks) {
+		RefrenceLinks refrences = this.restTemplate.postForObject(CourseApiUrl.ADD_REFRENCE_LINK_API_ENDPOINT, refrenceLinks, RefrenceLinks.class); 
+		refrenceLinks.setId(refrences.getId());
+		refrenceLinks.setLink(refrences.getLink());
+		refrenceLinks.setSubTopic(refrences.getSubTopic());
+		return refrenceLinks;
+	}
+
+	@Override
+	public OnlineAssessmentLinks addOnlineAssessmentLinks(OnlineAssessmentLinks onlineAssessmentLinks) {
+		OnlineAssessmentLinks onlineLinks = this.restTemplate.postForObject(CourseApiUrl.ADD_ONLINE_ASSESSMENT_LINK_API_ENDPOINT, onlineAssessmentLinks, OnlineAssessmentLinks.class);
+		onlineAssessmentLinks.setId(onlineLinks.getId());
+		onlineAssessmentLinks.setAssessmentLinks(onlineLinks.getAssessmentLinks());
+		onlineAssessmentLinks.setSubTopic(onlineLinks.getSubTopic());
+		return onlineAssessmentLinks;
+	}
+
+	@Override
+	public List<RefrenceLinks> getLinksBySubTopicId(Long subTopicId) {
+		List<RefrenceLinks> refrenceLinks = new ArrayList<RefrenceLinks>();
+		ResponseEntity<List<RefrenceLinks>> claimResponse = restTemplate.exchange(
+				String.format(CourseApiUrl.REFRENCE_LINKS_BY_SUB_TOPIC_ID_API_ENDPOINT, subTopicId), HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<RefrenceLinks>>() {
+				});// call get questions by subtopicId api of course service by resttemplate
+		if (claimResponse != null && claimResponse.hasBody()) {
+			refrenceLinks = claimResponse.getBody();
+		}
+		return refrenceLinks;
+	}
+
+	@Override
+	public List<OnlineAssessmentLinks> getAssessmentLinksBySubTopicId(Long subTopicId) {
+		List<OnlineAssessmentLinks> onlineLinks = new ArrayList<OnlineAssessmentLinks>();
+		ResponseEntity<List<OnlineAssessmentLinks>> claimResponse = restTemplate.exchange(
+				String.format(CourseApiUrl.ONLINE_ASSESSMENT_LINKS_BY_SUB_TOPIC_ID_API_ENDPOINT, subTopicId), HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<OnlineAssessmentLinks>>() {
+				});// call get questions by subtopicId api of course service by resttemplate
+		if (claimResponse != null && claimResponse.hasBody()) {
+			onlineLinks = claimResponse.getBody();
+		}
+		return onlineLinks;
 	}
 }

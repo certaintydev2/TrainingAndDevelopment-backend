@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.usermicroservice.dto.RoleDTO;
@@ -14,8 +15,10 @@ import com.example.usermicroservice.entity.RoleModel;
 import com.example.usermicroservice.entity.TestQuestions;
 import com.example.usermicroservice.entity.UserData;
 import com.example.usermicroservice.helper.Course;
+import com.example.usermicroservice.helper.OnlineAssessmentLinks;
 import com.example.usermicroservice.helper.QuestionStatus;
 import com.example.usermicroservice.helper.Questions;
+import com.example.usermicroservice.helper.RefrenceLinks;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
 import com.example.usermicroservice.payload.ChangePasswordPayload;
@@ -135,4 +138,12 @@ public interface UserService {
 
 	public String solveTest(MultipartFile file, Long traineeId, Long questionId)
 			throws IllegalStateException, IOException;
+	
+	public RefrenceLinks addRefrenceLinks(RefrenceLinks refrenceLinks);
+	
+	public OnlineAssessmentLinks addOnlineAssessmentLinks(OnlineAssessmentLinks onlineAssessmentLinks);
+	
+	public List<RefrenceLinks> getLinksBySubTopicId(Long subTopicId);
+	
+	public List<OnlineAssessmentLinks> getAssessmentLinksBySubTopicId(Long subTopicId);
 }

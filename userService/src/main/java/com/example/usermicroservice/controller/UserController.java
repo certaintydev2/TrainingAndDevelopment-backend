@@ -7,7 +7,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,8 +37,10 @@ import com.example.usermicroservice.entity.RoleModel;
 import com.example.usermicroservice.entity.TestQuestions;
 import com.example.usermicroservice.entity.UserData;
 import com.example.usermicroservice.helper.Course;
+import com.example.usermicroservice.helper.OnlineAssessmentLinks;
 import com.example.usermicroservice.helper.QuestionStatus;
 import com.example.usermicroservice.helper.Questions;
+import com.example.usermicroservice.helper.RefrenceLinks;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
 import com.example.usermicroservice.payload.ChangePasswordPayload;
@@ -830,5 +831,25 @@ public class UserController {
 	public String solveTest(@RequestParam("file") MultipartFile file, @RequestParam("traineeId") Long traineeId, 
 			@RequestParam("questionId") Long questionId) throws IllegalStateException, IOException {
 		return this.userService.solveTest(file, traineeId, questionId);
+	}
+	
+	@PostMapping("/addRefrenceLinks")
+	public RefrenceLinks addRefrenceLinks(@RequestBody RefrenceLinks refrenceLinks) {
+		return this.userService.addRefrenceLinks(refrenceLinks);
+	}
+	
+	@PostMapping("/addOnlineAssessmentLinks")
+	public OnlineAssessmentLinks addOnlineAssessmentLinks(@RequestBody OnlineAssessmentLinks onlineAssessmentLinks) {
+		return this.userService.addOnlineAssessmentLinks(onlineAssessmentLinks);
+	}
+	
+	@GetMapping("/getLinksBySubTopicId/{subTopicId}")
+	public List<RefrenceLinks> getLinksBySubTopicId(@PathVariable("subTopicId") Long subTopicId){
+		return this.userService.getLinksBySubTopicId(subTopicId);
+	}
+	
+	@GetMapping("/getAssessmentLinksBySubTopicId/{subTopicId}")
+	public List<OnlineAssessmentLinks> getAssessmentLinksBySubTopicId(@PathVariable("subTopicId") Long subTopicId){
+		return this.userService.getAssessmentLinksBySubTopicId(subTopicId);
 	}
 }
