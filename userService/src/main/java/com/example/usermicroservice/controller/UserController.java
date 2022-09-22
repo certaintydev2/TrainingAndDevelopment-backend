@@ -751,6 +751,10 @@ public class UserController {
 			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	/*
+	 *  api to assign trainee to mentor
+	 */
 
 	@PostMapping("/assignMentorToTrainee")
 	public ResponseEntity<AssignMentor> assignMentor(@RequestBody AssignMentor assignMentor) {
@@ -762,6 +766,10 @@ public class UserController {
 		}
 	}
 
+	/*
+	 * api to get all profiles
+	 */
+	
 	@GetMapping("/authenticate/getAllProfile")
 	public ResponseEntity<List<Profile>> getAllProfiles() {
 		try {
@@ -772,6 +780,10 @@ public class UserController {
 		}
 	}
 
+	/*
+	 * api to get course by courseName 
+	 */
+	
 	@GetMapping("/getCourseByCourseName/{courseName}")
 	public ResponseEntity<Course> getCourseByCourseName(@PathVariable("courseName") String courseName) {
 		try {
@@ -782,11 +794,17 @@ public class UserController {
 		}
 	}
 
+	/*
+	 *  api to get whole course module by course id
+	 */
 	@GetMapping("/getWholeCourseByCourseId/{courseId}")
 	public Map<String, Object> getWholeCourseByCourseId(@PathVariable("courseId") Long courseId) {
 		return this.userService.getWholeCourseByCourseId(courseId);
 	}
 
+	/*
+	 *  api to add test questions
+	 */
 	@PostMapping("/addTestQuestions")
 	public ResponseEntity<TestQuestions> addTestQuestions(@RequestBody TestQuestions testQuestions) {
 		try {
@@ -797,6 +815,9 @@ public class UserController {
 		}
 	}
 
+	/*
+	 *  api to get test by profile
+	 */
 	@GetMapping("/getTestByProfile/{profile}")
 	public ResponseEntity<List<TestQuestions>> getQuestionsByProfile(@PathVariable("profile") String profile) {
 		try {
@@ -807,6 +828,9 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 *  api to get assigned mentor list
+	 */
 	@GetMapping("/getAssignedMentorList")
 	public ResponseEntity<List<AssignMentor>> getAssignedMentorList(){
 		try {
@@ -817,6 +841,9 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 * api to get assigned mentor by trainee Id
+	 */
 	@GetMapping("/getAssignMentorBytraineeId/{traineeId}")
 	public ResponseEntity<AssignMentor> getAssignMentorByTraineeId(@PathVariable("traineeId") Long traineeId){
 		try {
@@ -827,27 +854,42 @@ public class UserController {
 		}
 	}
 	
+	/*
+	 * api for solve test by upload file
+	 */
 	@PostMapping("/solveTest")
 	public String solveTest(@RequestParam("file") MultipartFile file, @RequestParam("traineeId") Long traineeId, 
 			@RequestParam("questionId") Long questionId) throws IllegalStateException, IOException {
 		return this.userService.solveTest(file, traineeId, questionId);
 	}
 	
+	/*
+	 *  api to add refrence links for subtopic
+	 */
 	@PostMapping("/addRefrenceLinks")
 	public RefrenceLinks addRefrenceLinks(@RequestBody RefrenceLinks refrenceLinks) {
 		return this.userService.addRefrenceLinks(refrenceLinks);
 	}
 	
+	/*
+	 *  api to add online assessment links for subtopic
+	 */
 	@PostMapping("/addOnlineAssessmentLinks")
 	public OnlineAssessmentLinks addOnlineAssessmentLinks(@RequestBody OnlineAssessmentLinks onlineAssessmentLinks) {
 		return this.userService.addOnlineAssessmentLinks(onlineAssessmentLinks);
 	}
 	
+	/*
+	 *  api to get refrence links by subtopic id
+	 */
 	@GetMapping("/getLinksBySubTopicId/{subTopicId}")
 	public List<RefrenceLinks> getLinksBySubTopicId(@PathVariable("subTopicId") Long subTopicId){
 		return this.userService.getLinksBySubTopicId(subTopicId);
 	}
 	
+	/*
+	 *  api to get assessment links by subtopic id
+	 */
 	@GetMapping("/getAssessmentLinksBySubTopicId/{subTopicId}")
 	public List<OnlineAssessmentLinks> getAssessmentLinksBySubTopicId(@PathVariable("subTopicId") Long subTopicId){
 		return this.userService.getAssessmentLinksBySubTopicId(subTopicId);
